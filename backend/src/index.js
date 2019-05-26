@@ -1,69 +1,48 @@
-let mongoose = require('mongoose')
-let express = require('express')
-let app = express()
+const mongoose = require('mongoose');
+const express = require('express');
+const app = express();
 // routes
 // let blaRoute = require('./routes/bla')
+const commentRoute = require('./controllers/commentRoute');
+const userRoute = require('./controllers/userRoute');
+const postRoute = require('./controllers/postRoute');
 
-
-let path = require('path')
-let bodyParser = require('body-parser')
+const path = require('path');
+const bodyParser = require('body-parser');
 
 //middleware
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 //middleware template
-app.use((req, res, next) => {
-  console.log('middleware used')
-  next()
-})
+// app.use((req, res, next) => {
+//   console.log('middleware used');
+//   next();
+// });
 
 // app.use(blaRoute)
+app.use(commentRoute);
+app.use(userRoute);
+app.use(postRoute);
 
+//Server and DB
 
-app.use((req, res, next) => {
-  res.status(404).send("Things is jank!")
-})
+const port = process.env.PORT || 8000;
+const dbUrl = "mongodb://localhost:27017/mydb";
 
-const PORT = process.env.PORT || 8000
-app.listen(PORT, () => console.info(`Server has started on ${PORT}`))
+connect();
 
-const url = "mongodb://localhost:27017/mydb"
+function listen() {
+  app.listen(port);
+  console.log('App started on port ' + port);
+}
 
-
-mongoose.connect(url, {useNewUrlParser: true}, function(err, db) {
-
-  if (err) throw err;
-  console.log("Database created")
-
-  let postSchema = new mongoose.Schema({
-    title: String,
-    owner: String,
-    votes: Number
-  });
-
-  postSchema.methods.shout = function(){
-    console.log(this.title + "!!!")
-  }
-
-  let Post = mongoose.model('post', postSchema)
-  let posts = []
-
-  for(let i=0; i<0; i++){
-    let newp = new Post({
-      title: "post_"+i,
-      owner: "ssono",
-      votes: Math.floor(Math.random() * 100)
-    });
-
-    newp.save(function(err, newp){
-      if (err) return console.error(err);
-    });
-  }
-
-
-  Post.find(function(err, posts){
-    if (err) return console.error(err);
-    console.log(posts);
-  });
-
-});
+function connect() {
+  mongoose.connection
+    .on('error', console.log)
+    .on('disconnected', connect)
+    .once('open', listen);
+  return mongoose.connect(dbUrl, { keepAlive: 1, useNewUrlParser: true });
+}
