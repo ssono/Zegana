@@ -16,13 +16,24 @@ router.post('/comments', function(req, res) {
 
   let newComment = Comment(req.body);
   newComment.save()
-    .then(comment => {
+    .then(async comment => {
       if(!comment || comment.length === 0){
         res.status(500).json(comment);
       }
+
+      let parComment = await Comment.findById(comment.parentComment);
+      let newParReplies = await parComment.replies;
+      newParReplies.push(comment._id);
+      await Comment.findByIdAndUpdate(
+        comment.parentComment,
+        {replies: newParReplies},
+        {useFindAndModify: false}
+      );
+
       res.status(201).json(comment);
     })
     .catch(err => {
+      console.log(err);
       res.status(500).json(err);
     })
 });
@@ -62,7 +73,10 @@ router.put('/comments/:ObjectId', function(req, res){
 
 //delete comment by id
 router.delete('/comments/:ObjectId', function(req, res){
-  Comment.findByIdAndDelete(req.params.ObjectId, {useFindAndModify: false})
+  Comment.findByIdAndUpdate(
+    req.params.ObjectId,
+    {deleted: true, votes: 0, voters: []}, 
+    {useFindAndModify: false})
     .then(() =>{
       res.status(202).send("successfully deleted");
     })

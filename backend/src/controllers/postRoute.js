@@ -43,7 +43,15 @@ router.get('/posts', function(req, res){
 //get specific post by ID
 router.get('/posts/:ObjectId', function(req, res){
   Post.findById(req.params.ObjectId)
-    .then(post => {
+    .then(async post =>{
+      //get expanded models
+      // let author = await post.getAuthor();
+      // let comments = await post.getComments();
+      // post = post.toObject();
+      //
+      // //replace with expanded models
+      // post.author = await author;
+      // post.comments = await comments;
       res.status(200).json(post);
     })
     .catch(err => {
@@ -71,7 +79,31 @@ router.delete('/posts/:ObjectId', function(req, res){
     .catch(err => {
       res.status(500).json(err);
     })
-})
+});
+
+//toggleVote
+router.post('/posts/:ObjectId/vote', function(req, res){
+  let voterId = req.body.voterId;
+
+  //get the post to be changes
+  Post.findById(req.params.ObjectId)
+    .then(post => {
+
+      //get the update data for new votes and voters
+      let data = post.voteUpdateData(voterId);
+      Post.findByIdAndUpdate(req.params.ObjectId, data, {new: true, useFindAndModify: false})
+        .then(post => {
+          res.status(200).json(post);
+        })
+        .catch(err => {
+          res.status(500).json(err);
+        })
+
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+});
 
 
 module.exports = router;
