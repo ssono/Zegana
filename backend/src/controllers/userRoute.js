@@ -4,6 +4,8 @@ const express = require('express');
 const router = express.Router();
 const Comment = require('../models/commentModel');
 const Post = require('../models/postModel');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 // TODO implement routes
 // router.method('/path', function(req, res){
@@ -11,12 +13,24 @@ const Post = require('../models/postModel');
 // });
 
 //Create a new User
-router.post('/users', function(req, res){
+router.post('/users', async function(req, res){
   if(!req.body) {
     return res.status(400).send("Body is missing");
   }
+  let data = req.body;
 
-  let newUser = User(req.body);
+
+  data.hashedPass = await bcrypt.hash(data.hashedPass, saltRounds)
+    .catch(err => {
+      console.log(err);
+      res.status(500).send("error while hashing");
+    });
+
+  // bcrypt.compare(myPlaintextPassword, hash, function(err, res) {
+  //   // res == true
+  // });
+
+  let newUser = User(data);
   newUser.save()
     .then(user => {
       if(!user || user.length === 0) {
