@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const express = require('express');
 const router = express.Router();
+const Comment = require('../models/commentModel');
+const Post = require('../models/postModel');
 
 // TODO implement routes
 // router.method('/path', function(req, res){
@@ -69,6 +71,50 @@ router.delete('/users/:ObjectId', function(req, res){
     .catch(err => {
       res.status(500).json(err);
     })
-})
+});
+
+//Get comments
+router.get('/users/:ObjectId/comments', function(req, res) {
+  Comment.find({author: req.params.ObjectId})
+    .then(comments => {
+      res.status(200).json(comments);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    })
+});
+
+//get posts
+router.get('/users/:ObjectId/posts', function(req, res) {
+  Post.find({author: req.params.ObjectId})
+    .then(posts => {
+      res.status(200).json(posts);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    })
+});
+
+//get saved posts
+router.get('/users/:ObjectId/saved', async function(req, res){
+  let user = await User.findById(req.params.ObjectId)
+    .catch(err => {
+      console.log(err);
+    });
+
+  let posts = [];
+
+  for(let i = 0; i<user.savedPosts.length;i+=1){
+    let post = await Post.findById(user.savedPosts[i])
+      .catch(err => {
+        console.log(err);
+      })
+    posts.push(post);
+  }
+
+  res.status(200).json(posts);
+});
 
 module.exports = router;

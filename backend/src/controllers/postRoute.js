@@ -89,7 +89,7 @@ router.delete('/posts/:ObjectId', function(req, res){
 router.get('/posts/:ObjectId/vote/:voterId', function(req, res){
   let voterId = req.params.voterId;
 
-  //get the post to be changes
+  //get the post to be changed
   Post.findById(req.params.ObjectId)
     .then(async post => {
 
@@ -157,6 +157,32 @@ router.get('/posts/:ObjectId/comments', function(req, res) {
       console.log(err);
       res.status(500).json(err);
     })
+});
+
+//save post
+router.get('/posts/:ObjectId/save/:usrId', async function(req, res) {
+
+  let user = await User.findById(req.params.usrId)
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    })
+
+  if(user.savedPosts.includes(req.params.ObjectId)){
+    res.status(200).send("Already saved")
+  } else {
+    let newSaved = user.savedPosts;
+    newSaved.push(objectId);
+    await User.findByIdAndUpdate(
+      user._id,
+      {savedPosts: newSaved},
+      {useFindAndModify: false}
+    ).catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    })
+    res.status(200).send("Successfully saved")
+  }
 });
 
 
