@@ -145,9 +145,9 @@ router.get('/posts/:ObjectId/voters', async function(req, res){
   }
 
   res.status(200).json(voters);
-})
+});
 
-//get comment instances
+//get immediate children comment instances
 router.get('/posts/:ObjectId/comments', function(req, res) {
   Comment.find({parentPost: req.params.ObjectId, parentComment:undefined})
     .then(comments => {

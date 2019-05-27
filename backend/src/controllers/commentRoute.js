@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Comment = require('../models/commentModel');
 const express = require('express');
 const router = express.Router();
+const User = require('../models/userModel');
+const Post = require('../models/postModel');
 
 // TODO implement routes
 // router.method('/path', function(req, res){
@@ -100,6 +102,88 @@ router.get('/comments/:ObjectId/vote/:voterId', function(req, res){
       console.log(err);
       res.status(500).json(err);
     })
+});
+
+//get author instance
+router.get('/comments/:ObjectId/author', async function(req, res){
+  let comment = await Comment.findById(req.params.ObjectId)
+    .catch(err => {
+      console.log(err);
+    });
+
+  await User.findById(comment.author)
+    .then(author => {
+      res.status(200).json(author);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+});
+
+//get parent post instance
+router.get('/comments/:ObjectId/ppost', async function(req, res){
+  let comment = await Comment.findById(req.params.ObjectId)
+    .catch(err => {
+      console.log(err);
+    });
+
+  await Post.findById(comment.parentPost)
+    .then(post => {
+      res.status(200).json(post);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+});
+
+//get parentComment instance
+router.get('/comments/:ObjectId/pcomment', async function(req, res){
+  let comment = await Comment.findById(req.params.ObjectId)
+    .catch(err => {
+      console.log(err);
+    });
+
+  if(!comment.parentComment){ return res.status(404).send('This comment is an orphan')}
+
+  await Comment.findById(comment.parentComment)
+    .then(comment => {
+      res.status(200).json(comment);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+});
+
+//get replies
+router.get('/comments/:ObjectId/replies', function(req, res) {
+  Comment.find({parentComment: req.params.ObjectId})
+    .then(comments => {
+      res.status(200).json(comments);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    })
+});
+
+//get voter instances
+router.get('/comments/:ObjectId/voters', async function(req, res){
+  let comment = await Comment.findById(req.params.ObjectId)
+    .catch(err => {
+      console.log(err);
+    });
+
+  let voters = [];
+
+  for(let i = 0; i<comment.voters.length;i+=1){
+    let voter = await User.findById(comment.voters[i])
+      .catch(err => {
+        console.log(err);
+      })
+    voters.push(voter);
+  }
+
+  res.status(200).json(voters);
 });
 
 module.exports = router;
