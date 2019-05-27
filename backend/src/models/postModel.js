@@ -9,37 +9,23 @@ const postSchema = new Schema({
   pitch: {type: String, required: true},
   edits: {type: [String], default: []},
   author: {type: Schema.Types.ObjectId, required: true},
-  dateCreated: {type: Date, default: Date.now()},
+  dateCreated: {type: Number, default: Date.now()},
   tags: {type: [String], default: []},
-  comments: {type: [Schema.Types.ObjectId], default: []},
   votes: {type: Number, default: 0},
   voters: {type: [Schema.Types.ObjectId], default: []}
 });
 
-//premethods
-
-//On save, add Id to user
-postSchema.pre('save', async function(next){
-  let user = await User.findById(this.author);
-  let newUserPosts = await user.posts;
-  newUserPosts.push(this._id);
-  await User.findByIdAndUpdate(
-    this.author,
-    {posts: newUserPosts},
-    {useFindAndModify: false}
-  );
-  next();
-});
 
 //instance.methodName
 postSchema.methods = {
 
-  voteUpdateData: function(voterId){
+  voteUpdateData: async function(voterId){
 
     voterId = mongoose.Types.ObjectId(voterId);
     let voting = true;
     let newVoters = [];
 
+    //check if voting or unvoting and assemble data
     for(let i = 0; i<this.voters.length; i++){
       let v = this.voters[i];
 
@@ -51,6 +37,21 @@ postSchema.methods = {
       }
     }
 
+    //update author's kudos
+    let author = await User.findById(this.author)
+      .catch(err => {
+        console.log(err);
+      })
+    let votes = voting ? author.votes + 1: author.votes -1;
+    User.findByIdAndUpdate(
+      this.author,
+      {votes: votes},
+      {useFindAndModify: false}
+    ).catch(err => {
+      console.log(err);
+    });
+
+    //return correct data
     if(!voting){
 
       return{
@@ -60,7 +61,6 @@ postSchema.methods = {
 
     }
     else{
-
       newVoters.push(voterId);
       return {
           votes: this.votes + 1,
@@ -68,49 +68,6 @@ postSchema.methods = {
       }
 
     }
-  },
-
-//get author model
-  getAuthor: async function() {
-    author = await User.findById(this.author)
-      .then(author => {
-        return author;
-      })
-      .catch(err => {
-        console.log(err);
-      })
-    return author
-  },
-
-//get comment objects
-  getComments: function() {
-    console.log('here')
-
-    const recHelper = function(commentIds, currentDepth, maxDepth){
-      if(commentIds.length == 0) { return [];}
-      if(currentDepth == maxDepth) {
-          let comments = [];
-          for(i in commentIds){
-            Comment.findById(commentIds[i])
-              .then(comment => {
-                comments.push(comment.toObject());
-              })
-          }
-          return comments;
-      }
-      let comments = [];
-      for(i in commentIds){
-        Comment.findById(commentIds[i])
-          .then(async c => {
-            c = c.toObject();
-            c.comments = await recHelper(c.comments, currentDepth+1, maxDepth);
-            comments.push(c);
-          })
-      }
-      return comments;
-    }
-
-    return recHelper(this.comments, 0, 3)
   }
 
 }

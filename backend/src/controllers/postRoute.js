@@ -19,11 +19,13 @@ router.post('/posts', function(req, res){
   newPost.save()
     .then( post => {
       if(!post || post.length === 0 ){
+        console.log(post);
         return res.status(500).send(post)
       }
       res.status(201).json(post);
     })
     .catch(err => {
+      console.log(err);
       res.status(500).json(err);
     })
 
@@ -44,14 +46,6 @@ router.get('/posts', function(req, res){
 router.get('/posts/:ObjectId', function(req, res){
   Post.findById(req.params.ObjectId)
     .then(async post =>{
-      //get expanded models
-      // let author = await post.getAuthor();
-      // let comments = await post.getComments();
-      // post = post.toObject();
-      //
-      // //replace with expanded models
-      // post.author = await author;
-      // post.comments = await comments;
       res.status(200).json(post);
     })
     .catch(err => {
@@ -72,6 +66,15 @@ router.put('/posts/:ObjectId', function(req, res){
 
 //Delete object by Id
 router.delete('/posts/:ObjectId', function(req, res){
+  Post.findById(req.params.ObjectId, {useFindAndModify: false})
+    .then(post => {
+      post.cleanup();
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json(err);
+    })
+
   Post.findByIdAndDelete(req.params.ObjectId, {useFindAndModify: false})
     .then(() => {
       res.status(202).send("successfully deleted");
@@ -82,28 +85,34 @@ router.delete('/posts/:ObjectId', function(req, res){
 });
 
 //toggleVote
-router.post('/posts/:ObjectId/vote', function(req, res){
-  let voterId = req.body.voterId;
+router.get('/posts/:ObjectId/vote/:voterId', function(req, res){
+  let voterId = req.params.voterId;
 
   //get the post to be changes
   Post.findById(req.params.ObjectId)
-    .then(post => {
+    .then(async post => {
 
       //get the update data for new votes and voters
-      let data = post.voteUpdateData(voterId);
+      let data = await post.voteUpdateData(voterId);
       Post.findByIdAndUpdate(req.params.ObjectId, data, {new: true, useFindAndModify: false})
         .then(post => {
           res.status(200).json(post);
         })
         .catch(err => {
+          console.log(err);
           res.status(500).json(err);
         })
 
     })
     .catch(err => {
+      console.log(err);
       res.status(500).json(err);
     })
 });
+
+//get author instance
+
+//get voter instances
 
 
 module.exports = router;

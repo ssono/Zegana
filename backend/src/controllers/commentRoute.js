@@ -21,14 +21,16 @@ router.post('/comments', function(req, res) {
         res.status(500).json(comment);
       }
 
-      let parComment = await Comment.findById(comment.parentComment);
-      let newParReplies = await parComment.replies;
-      newParReplies.push(comment._id);
-      await Comment.findByIdAndUpdate(
-        comment.parentComment,
-        {replies: newParReplies},
-        {useFindAndModify: false}
-      );
+      if(comment.parentComment){
+        let parComment = await Comment.findById(comment.parentComment);
+        let newParReplies = await parComment.replies;
+        newParReplies.push(comment._id);
+        await Comment.findByIdAndUpdate(
+          comment.parentComment,
+          {replies: newParReplies},
+          {useFindAndModify: false}
+        );
+      }
 
       res.status(201).json(comment);
     })
@@ -75,7 +77,7 @@ router.put('/comments/:ObjectId', function(req, res){
 router.delete('/comments/:ObjectId', function(req, res){
   Comment.findByIdAndUpdate(
     req.params.ObjectId,
-    {deleted: true, votes: 0, voters: []}, 
+    {deleted: true, votes: 0, voters: [], author: undefined, content: undefined},
     {useFindAndModify: false})
     .then(() =>{
       res.status(202).send("successfully deleted");

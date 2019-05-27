@@ -6,9 +6,8 @@ const userSchema = new Schema({
   email: {type: String, required: true},
   hashedPass: {type: String, required: true},
   votes: {type: Number, default: 0},
+  joined: {type: Number, default: Date.now()},
   friends: {type: [Schema.Types.ObjectId], default: []},
-  posts: {type: [Schema.Types.ObjectId], default: []},
-  comments: {type: [Schema.Types.ObjectId], default: []},
   savedPosts: {type: [Schema.Types.ObjectId], default: []}
 });
 
