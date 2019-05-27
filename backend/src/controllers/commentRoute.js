@@ -21,17 +21,6 @@ router.post('/comments', function(req, res) {
         res.status(500).json(comment);
       }
 
-      if(comment.parentComment){
-        let parComment = await Comment.findById(comment.parentComment);
-        let newParReplies = await parComment.replies;
-        newParReplies.push(comment._id);
-        await Comment.findByIdAndUpdate(
-          comment.parentComment,
-          {replies: newParReplies},
-          {useFindAndModify: false}
-        );
-      }
-
       res.status(201).json(comment);
     })
     .catch(err => {
@@ -83,6 +72,32 @@ router.delete('/comments/:ObjectId', function(req, res){
       res.status(202).send("successfully deleted");
     })
     .catch(err => {
+      res.status(500).json(err);
+    })
+});
+
+//toggleVote
+router.get('/comments/:ObjectId/vote/:voterId', function(req, res){
+  let voterId = req.params.voterId;
+
+  //get the post to be changes
+  Comment.findById(req.params.ObjectId)
+    .then(async comment => {
+
+      //get the update data for new votes and voters
+      let data = await comment.voteUpdateData(voterId);
+      Comment.findByIdAndUpdate(req.params.ObjectId, data, {new: true, useFindAndModify: false})
+        .then(comment => {
+          res.status(200).json(comment);
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).json(err);
+        })
+
+    })
+    .catch(err => {
+      console.log(err);
       res.status(500).json(err);
     })
 });

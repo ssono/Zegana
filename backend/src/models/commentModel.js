@@ -19,6 +19,57 @@ const commentSchema = new Schema({
 //call with instance.methodName
 commentSchema.methods = {
 
+  voteUpdateData: async function(voterId){
+
+    voterId = mongoose.Types.ObjectId(voterId);
+    let voting = true;
+    let newVoters = [];
+
+    //check if voting or unvoting and assemble data
+    for(let i = 0; i<this.voters.length; i++){
+      let v = this.voters[i];
+
+      if(voterId.equals(v)){
+        voting = false;
+      }
+      else {
+        newVoters.push(v);
+      }
+    }
+
+    //update author's kudos
+    let author = await User.findById(this.author)
+      .catch(err => {
+        console.log(err);
+      })
+    let votes = voting ? author.votes + 1: author.votes -1;
+    User.findByIdAndUpdate(
+      this.author,
+      {votes: votes},
+      {useFindAndModify: false}
+    ).catch(err => {
+      console.log(err);
+    });
+
+    //return correct data
+    if(!voting){
+
+      return{
+        votes: this.votes - 1,
+        voters: newVoters
+      }
+
+    }
+    else{
+      newVoters.push(voterId);
+      return {
+          votes: this.votes + 1,
+          voters: newVoters
+      }
+
+    }
+  }
+
 };
 
 //call with Model.methodName

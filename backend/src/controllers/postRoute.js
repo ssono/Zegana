@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Post = require('../models/postModel');
 const express = require('express');
 const router = express.Router();
+const User = require('../models/userModel');
+const Comment = require('../models/commentModel');
 
 // TODO implement routes
 // router.method('/path', function(req, res){
@@ -19,7 +21,6 @@ router.post('/posts', function(req, res){
   newPost.save()
     .then( post => {
       if(!post || post.length === 0 ){
-        console.log(post);
         return res.status(500).send(post)
       }
       res.status(201).json(post);
@@ -111,8 +112,52 @@ router.get('/posts/:ObjectId/vote/:voterId', function(req, res){
 });
 
 //get author instance
+router.get('/posts/:ObjectId/author', async function(req, res){
+  let post = await Post.findById(req.params.ObjectId)
+    .catch(err => {
+      console.log(err);
+    });
+
+  await User.findById(post.author)
+    .then(author => {
+      res.status(200).json(author);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+});
 
 //get voter instances
+router.get('/posts/:ObjectId/voters', async function(req, res){
+  let post = await Post.findById(req.params.ObjectId)
+    .catch(err => {
+      console.log(err);
+    });
+
+  let voters = [];
+
+  for(let i = 0; i<post.voters.length;i+=1){
+    let voter = await User.findById(post.voters[i])
+      .catch(err => {
+        console.log(err);
+      })
+    voters.push(voter);
+  }
+
+  res.status(200).json(voters);
+})
+
+//get comment instances
+router.get('/posts/:ObjectId/comments', function(req, res) {
+  Comment.find({parentPost: req.params.ObjectId, parentComment:undefined})
+    .then(comments => {
+      res.status(200).json(comments);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    })
+});
 
 
 module.exports = router;

@@ -75,6 +75,7 @@ postSchema.methods = {
 //Post.staticName
 postSchema.statics = {
 
+
 };
 
 module.exports = mongoose.model('Post', postSchema);
