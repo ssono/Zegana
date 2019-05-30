@@ -14,6 +14,9 @@ const commentSchema = new Schema({
   deleted: {type: Boolean, default: false}
 });
 
+commentSchema.index({dateCreated: -1});
+commentSchema.index({votes: -1});
+
 //premethods
 
 //call with instance.methodName

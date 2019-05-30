@@ -72,6 +72,9 @@ postSchema.methods = {
 
 }
 
+postSchema.index({dateCreated: -1});
+postSchema.index({votes: -1});
+
 //Post.staticName
 postSchema.statics = {
 
