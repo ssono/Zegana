@@ -13,7 +13,7 @@ const Comment = require('../models/commentModel');
 //create new Post
 router.post('/posts', function(req, res){
 
-  if(!req.body) {
+  if(!req.body || (Object.entries(req.body).length === 0 && req.body.constructor === Object)) {
     return res.status(400).send("body is missing")
   }
 
@@ -56,7 +56,7 @@ router.get('/posts/:ObjectId', function(req, res){
 
 //Update specific post by ID
 router.put('/posts/:ObjectId', function(req, res){
-  Post.findByIdAndUpdate(req.params.ObjectId, req.body, {new: true, useFindAndModify: false})
+  Post.findByIdAndUpdate(req.params.ObjectId, req.body, {new: true})
     .then(post => {
       res.status(200).json(post);
     })
@@ -67,7 +67,7 @@ router.put('/posts/:ObjectId', function(req, res){
 
 //Delete object by Id
 router.delete('/posts/:ObjectId', function(req, res){
-  Post.findById(req.params.ObjectId, {useFindAndModify: false})
+  Post.findById(req.params.ObjectId, {})
     .then(post => {
       post.cleanup();
     })
@@ -76,7 +76,7 @@ router.delete('/posts/:ObjectId', function(req, res){
       res.status(500).json(err);
     })
 
-  Post.findByIdAndDelete(req.params.ObjectId, {useFindAndModify: false})
+  Post.findByIdAndDelete(req.params.ObjectId, {})
     .then(() => {
       res.status(202).send("successfully deleted");
     })
@@ -95,7 +95,7 @@ router.get('/posts/:ObjectId/vote/:voterId', function(req, res){
 
       //get the update data for new votes and voters
       let data = await post.voteUpdateData(voterId);
-      Post.findByIdAndUpdate(req.params.ObjectId, data, {new: true, useFindAndModify: false})
+      Post.findByIdAndUpdate(req.params.ObjectId, data, {new: true})
         .then(post => {
           res.status(200).json(post);
         })

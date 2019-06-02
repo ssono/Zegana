@@ -9,8 +9,13 @@ const postRoute = require('./controllers/postRoute');
 
 const path = require('path');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 //middleware
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true

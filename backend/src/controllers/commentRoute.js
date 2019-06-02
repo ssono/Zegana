@@ -12,7 +12,7 @@ const Post = require('../models/postModel');
 
 //create new comment
 router.post('/comments', function(req, res) {
-  if(!req.body){
+  if(!req.body || (Object.entries(req.body).length === 0 && req.body.constructor === Object)){
     res.status(400).send("body is missing");
   }
 
@@ -55,7 +55,7 @@ router.get('/comments/:ObjectId', function(req, res){
 
 //update comment by id
 router.put('/comments/:ObjectId', function(req, res){
-  Comment.findByIdAndUpdate(req.params.ObjectId, req.body, {new: true, useFindAndModify: false})
+  Comment.findByIdAndUpdate(req.params.ObjectId, req.body, {new: true})
     .then(comment =>{
       res.status(200).json(comment);
     })
@@ -88,7 +88,7 @@ router.get('/comments/:ObjectId/vote/:voterId', function(req, res){
 
       //get the update data for new votes and voters
       let data = await comment.voteUpdateData(voterId);
-      Comment.findByIdAndUpdate(req.params.ObjectId, data, {new: true, useFindAndModify: false})
+      Comment.findByIdAndUpdate(req.params.ObjectId, data, {new: true})
         .then(comment => {
           res.status(200).json(comment);
         })

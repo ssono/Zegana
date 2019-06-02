@@ -1,33 +1,67 @@
-.App {
+body{
+  background-color: #22548a;
+  background-image: url("images/topography.svg");
+}
+
+/*
+name(dark, light)
+original(22548a, 37c8a2)
+green(37c880, #35ff9a)
+blue(22548a, 3f9cff)
+
+
+ */
+
+.main {
+  margin: 25vh 6vw;
+  padding: 2vh 4vw;
+  background-color: white;
+  border-radius: 5px;
+}
+
+#zegana{
   text-align: center;
+  font-size: 2.5em;
+  color: #2A4EC3;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+#subtitle{
+  font-size: 1em;
+  text-align: center;
+  color: #666;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.btn {
+  width: 60%;
+  margin: 5px 20%;
+
+}
+
+.invalidField {
+  color: red;
+}
+
+#signup{
+  margin-top: 3%;
+  background-color: #37c880;
   color: white;
+  border-color: #22548a;
 }
 
-.App-link {
-  color: #61dafb;
+#signup:hover{
+  background-color: #35ff9a;
+  color: black;
+  box-shadow: 5px 5px 3px #ccc;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#login{
+  background-color: #22548a;
+  color: white;
+  border-color: #37c880
+}
+
+#login:hover{
+  background-color: #3f9cff;
+  color: black;
+  box-shadow: 5px 5px 3px #ccc;
 }
