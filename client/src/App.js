@@ -40,7 +40,17 @@ class App extends Component {
   }
 
   closeSignup() {
-    this.setState({ signup: false });
+    this.setState({
+      signup: false,
+      login: false,
+      email: "",
+      password: "",
+      username: "",
+      availableEmail: true,
+      availableUsername: true,
+      validLogin: true,
+      remember: false
+    });
   }
 
   showLogin() {
@@ -48,7 +58,17 @@ class App extends Component {
   }
 
   closeLogin() {
-    this.setState({ login: false });
+    this.setState({
+      signup: false,
+      login: false,
+      email: "",
+      password: "",
+      username: "",
+      availableEmail: true,
+      availableUsername: true,
+      validLogin: true,
+      remember: false
+    });
   }
 
   submitSignup(event) {
