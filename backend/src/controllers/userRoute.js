@@ -23,7 +23,7 @@ router.post('/users', async function (req, res) {
   data.password = await bcrypt.hash(data.password, saltRounds)
     .catch(err => {
       console.log(err);
-      res.status(500).send("error while hashing");
+      return res.status(500).send("error while hashing");
     });
 
   let newUser = User(data);
@@ -32,7 +32,7 @@ router.post('/users', async function (req, res) {
       if (!user || user.length === 0) {
         return res.status(500).send(user);
       }
-      res.status(201).json(user);
+      return res.status(201).json(user);
     })
     .catch(err => {
       if (err.code == 11000) {
@@ -40,33 +40,39 @@ router.post('/users', async function (req, res) {
           email: err.errmsg.includes('email') ? false : true,
           username: err.errmsg.includes('username') ? false : true          
         }
-        res.status(409).json(availability);
+        return res.status(409).json(availability);
 
       } else {
-        res.status(500).json(err);
+        return res.status(500).json(err);
       }
     })
 });
 
 //Login
 router.post('/users/login', async function(req,res){
-
  
-  let user = await User.findOne({email: req.body.email})
+  let user = await User.find({email: req.body.email})
     .catch(err => {
-      res.status(404).send("No user with that email");
-    });
+      console.log(err);
+      return res.status(500).json(err);
+    })
+
+  if(user.length === 0){
+    return res.status(404).send('User not found');
+  }
+
+  user = user[0];
   
   let passwordMatch = await bcrypt.compare(req.body.password, user.password)
     .catch(err => {
       console.log(err);
-      res.status(500).send(err);
+      return res.status(500).send(err);
     })
 
   if(!passwordMatch){
-    res.status(401).send("Passwords don't match");
+    return res.status(401).send("Passwords don't match");
   } else {
-    res.status(200).json(user);
+    return res.status(200).json(user);
   }  
 });
 
@@ -74,10 +80,10 @@ router.post('/users/login', async function(req,res){
 router.get('/users', function (req, res) {
   User.find().limit(100)
     .then(users => {
-      res.json(users);
+      return res.json(users);
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -85,10 +91,10 @@ router.get('/users', function (req, res) {
 router.get('/users/:ObjectId', function (req, res) {
   User.findById(req.params.ObjectId)
     .then(user => {
-      res.json(user);
+      return res.json(user);
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -96,10 +102,10 @@ router.get('/users/:ObjectId', function (req, res) {
 router.put('/users/:ObjectId', function (req, res) {
   User.findByIdAndUpdate(req.params.ObjectId, req.body, { new: true })
     .then(user => {
-      res.json(user);
+      return res.json(user);
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -107,10 +113,10 @@ router.put('/users/:ObjectId', function (req, res) {
 router.delete('/users/:ObjectId', function (req, res) {
   User.findByIdAndDelete(req.params.ObjectId, {})
     .then(() => {
-      res.status(202).send("successfully deleted");
+      return res.status(202).send("successfully deleted");
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -118,11 +124,11 @@ router.delete('/users/:ObjectId', function (req, res) {
 router.get('/users/:ObjectId/comments', function (req, res) {
   Comment.find({ author: req.params.ObjectId })
     .then(comments => {
-      res.status(200).json(comments);
+      return res.status(200).json(comments);
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -130,11 +136,11 @@ router.get('/users/:ObjectId/comments', function (req, res) {
 router.get('/users/:ObjectId/posts', function (req, res) {
   Post.find({ author: req.params.ObjectId })
     .then(posts => {
-      res.status(200).json(posts);
+      return res.status(200).json(posts);
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -143,6 +149,7 @@ router.get('/users/:ObjectId/saved', async function (req, res) {
   let user = await User.findById(req.params.ObjectId)
     .catch(err => {
       console.log(err);
+      return res.status(500).json(err);
     });
 
   let posts = [];
@@ -151,11 +158,12 @@ router.get('/users/:ObjectId/saved', async function (req, res) {
     let post = await Post.findById(user.savedPosts[i])
       .catch(err => {
         console.log(err);
+        return res.status(500).json(err);
       })
     posts.push(post);
   }
 
-  res.status(200).json(posts);
+  return res.status(200).json(posts);
 });
 
 module.exports = router;

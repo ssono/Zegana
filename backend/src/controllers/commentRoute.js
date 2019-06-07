@@ -13,21 +13,21 @@ const Post = require('../models/postModel');
 //create new comment
 router.post('/comments', function(req, res) {
   if(!req.body || (Object.entries(req.body).length === 0 && req.body.constructor === Object)){
-    res.status(400).send("body is missing");
+    return res.status(400).send("body is missing");
   }
 
   let newComment = Comment(req.body);
   newComment.save()
     .then(async comment => {
       if(!comment || comment.length === 0){
-        res.status(500).json(comment);
+        return res.status(500).json(comment);
       }
 
-      res.status(201).json(comment);
+      return res.status(201).json(comment);
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -35,10 +35,10 @@ router.post('/comments', function(req, res) {
 router.get('/comments', function(req, res) {
   Comment.find().limit(100)
     .then(comments => {
-      res.status(200).json(comments);
+      return res.status(200).json(comments);
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -46,10 +46,10 @@ router.get('/comments', function(req, res) {
 router.get('/comments/:ObjectId', function(req, res){
   Comment.findById(req.params.ObjectId)
     .then(comment => {
-      res.status(200).json(comment);
+      return res.status(200).json(comment);
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 })
 
@@ -57,10 +57,10 @@ router.get('/comments/:ObjectId', function(req, res){
 router.put('/comments/:ObjectId', function(req, res){
   Comment.findByIdAndUpdate(req.params.ObjectId, req.body, {new: true})
     .then(comment =>{
-      res.status(200).json(comment);
+      return res.status(200).json(comment);
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -71,10 +71,10 @@ router.delete('/comments/:ObjectId', function(req, res){
     {deleted: true, votes: 0, voters: [], author: undefined, content: undefined},
     {useFindAndModify: false})
     .then(() =>{
-      res.status(202).send("successfully deleted");
+      return res.status(202).send("successfully deleted");
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -90,17 +90,17 @@ router.get('/comments/:ObjectId/vote/:voterId', function(req, res){
       let data = await comment.voteUpdateData(voterId);
       Comment.findByIdAndUpdate(req.params.ObjectId, data, {new: true})
         .then(comment => {
-          res.status(200).json(comment);
+          return res.status(200).json(comment);
         })
         .catch(err => {
           console.log(err);
-          res.status(500).json(err);
+          return res.status(500).json(err);
         })
 
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -113,10 +113,10 @@ router.get('/comments/:ObjectId/author', async function(req, res){
 
   await User.findById(comment.author)
     .then(author => {
-      res.status(200).json(author);
+      return res.status(200).json(author);
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -129,10 +129,10 @@ router.get('/comments/:ObjectId/ppost', async function(req, res){
 
   await Post.findById(comment.parentPost)
     .then(post => {
-      res.status(200).json(post);
+      return res.status(200).json(post);
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -141,16 +141,17 @@ router.get('/comments/:ObjectId/pcomment', async function(req, res){
   let comment = await Comment.findById(req.params.ObjectId)
     .catch(err => {
       console.log(err);
+      return res.status(500).json(err);
     });
 
   if(!comment.parentComment){ return res.status(404).send('This comment is an orphan')}
 
   await Comment.findById(comment.parentComment)
     .then(comment => {
-      res.status(200).json(comment);
+      return res.status(200).json(comment);
     })
     .catch(err => {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -158,11 +159,11 @@ router.get('/comments/:ObjectId/pcomment', async function(req, res){
 router.get('/comments/:ObjectId/replies', function(req, res) {
   Comment.find({parentComment: req.params.ObjectId})
     .then(comments => {
-      res.status(200).json(comments);
+      return res.status(200).json(comments);
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json(err);
+      return res.status(500).json(err);
     })
 });
 
@@ -171,6 +172,7 @@ router.get('/comments/:ObjectId/voters', async function(req, res){
   let comment = await Comment.findById(req.params.ObjectId)
     .catch(err => {
       console.log(err);
+      return res.status(500).json(err);
     });
 
   let voters = [];
@@ -179,11 +181,12 @@ router.get('/comments/:ObjectId/voters', async function(req, res){
     let voter = await User.findById(comment.voters[i])
       .catch(err => {
         console.log(err);
+        return res.status(500).json(err);
       })
     voters.push(voter);
   }
 
-  res.status(200).json(voters);
+  return res.status(200).json(voters);
 });
 
 module.exports = router;
