@@ -6,19 +6,24 @@ const Comment = require('./commentModel');
 const postSchema = new Schema({
   title: {type: String, required: true},
   problem: {type: String, required: true},
-  pitch: {type: String, required: true},
+  solution: {type: String, required: true},
+  plan: {type: String, required: true},
+  feasibility: {type: String, required: true},
+  help: {type: String, required: true},
   edits: {type: [String], default: []},
   author: {type: Schema.Types.ObjectId, required: true},
   dateCreated: {type: Number, default: Date.now()},
   tags: {type: [String], default: []},
   votes: {type: Number, default: 0},
-  voters: {type: [Schema.Types.ObjectId], default: []}
+  voters: {type: [Schema.Types.ObjectId], default: []},
+  lastUpdated: {type: Number, default: Date.now()}
 });
 
 
 //instance.methodName
 postSchema.methods = {
 
+  //updates vote count and voters
   voteUpdateData: async function(voterId){
 
     voterId = mongoose.Types.ObjectId(voterId);
@@ -37,7 +42,7 @@ postSchema.methods = {
       }
     }
 
-    //update author's kudos
+    //update author's points
     let author = await User.findById(this.author)
       .catch(err => {
         console.log(err);
@@ -74,6 +79,7 @@ postSchema.methods = {
 
 postSchema.index({dateCreated: -1});
 postSchema.index({votes: -1});
+postSchema.index({lastUpdated: -1})
 
 //Post.staticName
 postSchema.statics = {
