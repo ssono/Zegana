@@ -24,10 +24,10 @@ class Login extends Component {
             remember: false
         }
 
-        console.log(props);
     }
 
     submitLogin(event) {
+        
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
             event.preventDefault();
@@ -40,8 +40,6 @@ class Login extends Component {
                 email: this.state.email,
                 password: this.state.password
             }
-
-            console.log(data);
 
 
             fetch('http://localhost:8000/users/login', {
@@ -66,7 +64,7 @@ class Login extends Component {
                             cookies.set('username', user.username);
                         }
 
-                        console.log(user);
+                        window.location.href ='/frontpage';
 
                     } else if (res.status === 404 || res.status === 401) {
                         this.setState({
@@ -96,6 +94,7 @@ class Login extends Component {
     }
 
     render() {
+
         return (
             <Modal show={this.props.open} onHide={this.props.closeLogin} aria-labelledby="loginModalTitle" centered>
                 <Modal.Header closeButton>

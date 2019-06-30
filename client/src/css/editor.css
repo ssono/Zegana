@@ -1,0 +1,41 @@
+.public-DraftEditorPlaceholder-inner {
+    position: absolute;
+    color: #75797D;
+}
+
+.editorWrap{
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    min-height: 12em;
+    padding: 0.375rem 0.75rem
+}
+
+.editorWrapfocused{
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.editorWrapfocused .public-DraftEditorPlaceholder-root{
+  display: none;
+}
+
+.editorWrap-controls {
+    font-family: 'Helvetica', sans-serif;
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: inline-block;
+    user-select: none;
+  }
+  
+  .editorWrap-styleButton {
+    color: #999;
+    cursor: pointer;
+    margin-right: 16px;
+    padding: 2px 0;
+    display: inline-block;
+  }
+  
+  .editorWrap-activeButton {
+    color: #00966e;
+  }

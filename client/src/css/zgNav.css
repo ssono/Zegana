@@ -1,0 +1,35 @@
+.bg-custom {
+    background-color: #00966e;
+    margin: 0%;
+}
+
+#zg-brand {
+    color: white;
+    font-size: 2em;
+}
+
+.nav-pills{
+    margin: 0px 2%;
+}
+
+.nav-pills .nav-link:not(.active){
+    color: white;
+    background-color: #00966e;
+}
+
+.nav-pills .nav-link.active {
+    background-color: white !important;
+    color: #00966e !important;
+}
+
+.navbar-nav .nav-link{
+    padding-left: 1%;
+    padding-right: 1%;
+
+}
+
+a.dropdown-item:hover{
+    background-color: #00966e;
+    color: white;
+}
+

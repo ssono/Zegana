@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-import './App.css';
+import { Redirect } from 'react-router-dom';
+import './css/App.css';
 import Login from './components/login';
 import Signup from './components/signup';
+import Cookies from 'universal-cookie';
+import topo from './images/topography.svg';
+
+const cookies = new Cookies();
+
 
 
 class App extends Component {
@@ -21,6 +27,7 @@ class App extends Component {
     }
   }
 
+
   showSignup() {
     this.setState({ signup: true });
   }
@@ -38,8 +45,16 @@ class App extends Component {
   }
 
   render() {
+    let uid = cookies.get('uid');
+    if(uid){
+      return(
+        <Redirect push to="/frontpage" />
+      )
+    }
     return (
       <div className="container-fluid">
+
+        <img src={topo} alt="topo background" className="bg"/>
 
         <div className="main shadow">
           <h1 id="zegana">Zegana</h1>
@@ -57,7 +72,7 @@ class App extends Component {
 
         <Login open={this.state.login} closeLogin={this.closeLogin} />
 
-    
+
 
       </div>
     );

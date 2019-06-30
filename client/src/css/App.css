@@ -1,16 +1,19 @@
-body{
-  background-color: #22548a;
-  background-image: url("images/topography.svg");
+img.bg {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+  background-color: #324357;
+
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
-
-/*
-name(dark, light)
-original(22548a, 37c8a2)
-green(37c880, #35ff9a)
-blue(22548a, 3f9cff)
-
-
- */
 
 .main {
   margin: 25vh 6vw;
@@ -22,7 +25,7 @@ blue(22548a, 3f9cff)
 #zegana{
   text-align: center;
   font-size: 2.5em;
-  color: #2A4EC3;
+  color: #00966e;
 }
 
 #subtitle{
@@ -43,19 +46,19 @@ blue(22548a, 3f9cff)
 
 #signup{
   margin-top: 3%;
-  background-color: #37c880;
+  background-color: #37c582;
   color: white;
-  border-color: #22548a;
+  border-color: #324357;
 }
 
 #signup:hover{
-  background-color: #35ff9a;
+  background-color: #2DF698;
   color: black;
   box-shadow: 5px 5px 3px #ccc;
 }
 
 #login{
-  background-color: #22548a;
+  background-color: #324357;
   color: white;
   border-color: #37c880
 }

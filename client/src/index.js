@@ -4,12 +4,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { Route, BrowserRouter as Router } from 'react-router-dom'
 import App from './App';
+import Frontpage from './components/frontpage';
+import NewIdea from './components/newIdea';
 import * as serviceWorker from './serviceWorker';
 
 
 const routing = (
   <Router>
     <Route exact path="/" component={App}/>
+    <Route exact path="/frontpage" component={Frontpage}/>
+    <Route exact path="/newIdea" component={NewIdea}/>
   </Router>
 )
 
