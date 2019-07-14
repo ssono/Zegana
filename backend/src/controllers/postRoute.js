@@ -235,22 +235,7 @@ router.get('/posts/:ObjectId/save/:usrId', async function (req, res) {
 
     return updatedPost;
   }
-
-  // if (user.savedPosts.includes(req.params.ObjectId)) {
-  //   return res.status(200).send("Already saved")
-  // } else {
-  //   let newSaved = user.savedPosts;
-  //   newSaved.push(objectId);
-  //   await User.findByIdAndUpdate(
-  //     user._id,
-  //     { savedPosts: newSaved },
-  //     { useFindAndModify: false }
-  //   ).catch(err => {
-  //     console.log(err);
-  //     return res.status(500).json(err);
-  //   })
-  //   return res.status(200).send("Successfully saved")
-  // }
+  
 });
 
 
