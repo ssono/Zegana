@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import fetch from 'node-fetch';
 import '../css/signup.css';
-import Cookies from 'universal-cookie';
+import { Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
 
@@ -68,9 +68,9 @@ class Signup extends Component {
           let json = await res.json();
           if (res.status === 201) {
             let user = json;
-            cookies.set('uid', user._id);
-            cookies.set('username', user.username);
-            window.location.href= '/frontpage';
+            cookies.set('uid', user._id, {path: '/'});
+            cookies.set('username', user.username, {path: '/'});
+            window.location.href= '/posts';
 
           } else if (res.status === 409) {
             this.setState({

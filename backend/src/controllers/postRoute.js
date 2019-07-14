@@ -95,6 +95,7 @@ router.get('/posts/:ObjectId/vote/:voterId', function (req, res) {
 
       //get the update data for new votes and voters
       let data = await post.voteUpdateData(voterId);
+      data.lastUpdated = Date.now();
       Post.findByIdAndUpdate(req.params.ObjectId, data, { new: true })
         .then(post => {
           return res.status(200).json(post);
@@ -164,28 +165,92 @@ router.get('/posts/:ObjectId/comments', function (req, res) {
 
 //save post
 router.get('/posts/:ObjectId/save/:usrId', async function (req, res) {
+  const usrId = req.params.usrId;
+  const objectId = req.params.ObjectId;  
 
-  let user = await User.findById(req.params.usrId)
+  let post = await Post.findById(objectId)
     .catch(err => {
       console.log(err);
       return res.status(500).json(err);
     })
 
-  if (user.savedPosts.includes(req.params.ObjectId)) {
-    return res.status(200).send("Already saved")
+  let user = await User.findById(usrId)
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json(err);
+    })
+
+  if(post.savers.includes(usrId)){
+
+    let newSavers = post.savers.reduce(function(acc, val){
+      if(!(val == usrId)){ acc.push(val) };
+      return acc;
+    }, []);
+
+    let newSaved = user.savedPosts.reduce(function(acc, val){
+      if(!(val == objectId)){ acc.push(val) };
+      return acc;
+    }, []);
+
+
+    User.findByIdAndUpdate(
+        user._id,
+        { savedPosts: newSaved },
+        { useFindAndModify: false }
+      ).catch(err => {
+        return res.status(500).json(err);
+      })
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      objectId,
+      { savers: newSavers, lastUpdated: Date.now() },
+      { useFindAndModify: false, new: true }
+    ).catch(err => {
+      return res.status(500).json(err);
+    })
+
+    return updatedPost;
+
   } else {
+    let newSavers = post.savers;
+    newSavers.push(usrId);
     let newSaved = user.savedPosts;
     newSaved.push(objectId);
-    await User.findByIdAndUpdate(
+
+    User.findByIdAndUpdate(
       user._id,
       { savedPosts: newSaved },
       { useFindAndModify: false }
     ).catch(err => {
-      console.log(err);
       return res.status(500).json(err);
     })
-    return res.status(200).send("Successfully saved")
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      objectId,
+      { savers: newSavers, lastUpdated: Date.now() },
+      { useFindAndModify: false, new: true }
+    ).catch(err => {
+      return res.status(500).json(err);
+    })
+
+    return updatedPost;
   }
+
+  // if (user.savedPosts.includes(req.params.ObjectId)) {
+  //   return res.status(200).send("Already saved")
+  // } else {
+  //   let newSaved = user.savedPosts;
+  //   newSaved.push(objectId);
+  //   await User.findByIdAndUpdate(
+  //     user._id,
+  //     { savedPosts: newSaved },
+  //     { useFindAndModify: false }
+  //   ).catch(err => {
+  //     console.log(err);
+  //     return res.status(500).json(err);
+  //   })
+  //   return res.status(200).send("Successfully saved")
+  // }
 });
 
 

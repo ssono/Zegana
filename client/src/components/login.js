@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import fetch from 'node-fetch';
 import '../css/login.css';
-import Cookies from 'universal-cookie';
+import { Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
 
@@ -57,14 +57,14 @@ class Login extends Component {
                                 console.log(err);
                             })
                         if (this.state.remember === true) {
-                            cookies.set('uid', user._id, { maxAge: 60 * 60 * 24 * 30 });
-                            cookies.set('username', user.username, { maxAge: 60 * 60 * 24 * 30 });
+                            cookies.set('uid', user._id, { maxAge: 60 * 60 * 24 * 30, path: '/' });
+                            cookies.set('username', user.username, { maxAge: 60 * 60 * 24 * 30, path: '/'});
                         } else {
-                            cookies.set('uid', user._id);
-                            cookies.set('username', user.username);
+                            cookies.set('uid', user._id, {path: '/'});
+                            cookies.set('username', user.username, {path: '/'});
                         }
 
-                        window.location.href ='/frontpage';
+                        window.location.href ='/posts';
 
                     } else if (res.status === 404 || res.status === 401) {
                         this.setState({

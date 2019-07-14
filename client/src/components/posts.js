@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import '../css/frontpage.css';
+import '../css/posts.css';
 import ZgNav from './zgNav';
 
-class Frontpage extends Component {
+class Posts extends Component {
     constructor(props) {
         super(props);
 
@@ -20,4 +20,4 @@ class Frontpage extends Component {
     }
 }
 
-export default Frontpage;
+export default Posts;

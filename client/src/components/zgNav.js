@@ -3,7 +3,7 @@ import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import '../css/zgNav.css';
 import Signup from './signup';
 import Login from './login';
-import Cookies from 'universal-cookie';
+import { Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
 
@@ -42,9 +42,9 @@ class Zgnav extends Component {
     }
 
     logout() {
-        cookies.remove('uid');
-        cookies.remove('username');
-        window.location.href = '/';
+        cookies.remove('uid', {path: '/'});
+        cookies.remove('username', {path: '/'});
+        window.location.href = '/posts';
     }
 
     render() {
@@ -58,7 +58,7 @@ class Zgnav extends Component {
             </Nav>
         )
 
-        if(this.state.username){
+        if(this.state.uid){
             navOptions = (
                 <Nav className="ml-auto" variant="pills">
                     <NavDropdown title="Account" id="basic-nav-dropdown">
@@ -77,7 +77,7 @@ class Zgnav extends Component {
 
         return (
             <Navbar collapseOnSelect expand="lg" variant="dark" className="bg-custom">
-                <Navbar.Brand href="/frontpage" id="zg-brand">Zegana</Navbar.Brand>
+                <Navbar.Brand href="/posts" id="zg-brand">Zegana</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     {navOptions}

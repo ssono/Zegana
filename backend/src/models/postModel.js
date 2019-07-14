@@ -5,17 +5,18 @@ const Comment = require('./commentModel');
 
 const postSchema = new Schema({
   title: {type: String, required: true},
-  problem: {type: String, required: true},
-  solution: {type: String, required: true},
-  plan: {type: String, required: true},
-  feasibility: {type: String, required: true},
-  help: {type: String, required: true},
+  problem: {type: Schema.Types.Mixed, required: true},
+  solution: {type: Schema.Types.Mixed, required: true},
+  plan: {type: Schema.Types.Mixed, required: true},
+  feasibility: {type: Schema.Types.Mixed, required: true},
+  help: {type: Schema.Types.Mixed, required: true},
   edits: {type: [String], default: []},
   author: {type: Schema.Types.ObjectId, required: true},
   dateCreated: {type: Number, default: Date.now()},
   tags: {type: [String], default: []},
   votes: {type: Number, default: 0},
   voters: {type: [Schema.Types.ObjectId], default: []},
+  savers: {type: [Schema.Types.ObjectId], default: []},
   lastUpdated: {type: Number, default: Date.now()}
 });
 

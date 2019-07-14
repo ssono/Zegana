@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import './css/App.css';
 import Login from './components/login';
 import Signup from './components/signup';
-import Cookies from 'universal-cookie';
+import { Cookies } from 'react-cookie';
 import topo from './images/topography.svg';
 
 const cookies = new Cookies();
@@ -48,7 +48,7 @@ class App extends Component {
     let uid = cookies.get('uid');
     if(uid){
       return(
-        <Redirect push to="/frontpage" />
+        <Redirect push to="/posts" />
       )
     }
     return (
