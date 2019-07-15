@@ -153,7 +153,7 @@ router.get('/posts/:ObjectId/voters', async function (req, res) {
 
 //get immediate children comment instances
 router.get('/posts/:ObjectId/comments', function (req, res) {
-  Comment.find({ parentPost: req.params.ObjectId, parentComment: undefined })
+  Comment.find({ parentPost: req.params.ObjectId, parentComment: null })
     .then(comments => {
       return res.status(200).json(comments);
     })
@@ -209,7 +209,7 @@ router.get('/posts/:ObjectId/save/:usrId', async function (req, res) {
       return res.status(500).json(err);
     })
 
-    return updatedPost;
+    return res.status(200).json(updatedPost);
 
   } else {
     let newSavers = post.savers;
@@ -232,8 +232,8 @@ router.get('/posts/:ObjectId/save/:usrId', async function (req, res) {
     ).catch(err => {
       return res.status(500).json(err);
     })
-
-    return updatedPost;
+    
+    return res.status(200).json(updatedPost);
   }
   
 });

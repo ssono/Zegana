@@ -68,7 +68,7 @@ router.put('/comments/:ObjectId', function(req, res){
 router.delete('/comments/:ObjectId', function(req, res){
   Comment.findByIdAndUpdate(
     req.params.ObjectId,
-    {deleted: true, votes: 0, voters: [], author: undefined, content: undefined},
+    {deleted: true, votes: 0, voters: [], author: null, content: null},
     {useFindAndModify: false})
     .then(() =>{
       return res.status(202).send("successfully deleted");

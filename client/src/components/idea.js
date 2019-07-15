@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
 import '../css/idea.css';
 import ZgNav from './zgNav';
-import { Editor, convertFromRaw, EditorState } from 'draft-js';
+import { Editor, convertFromRaw, EditorState, convertToRaw } from 'draft-js';
+import MyEditor from './editor';
 import { Cookies } from 'react-cookie';
 import { FaBookmark, FaArrowCircleUp } from 'react-icons/fa';
+import { Button } from 'react-bootstrap';
 
 const cookies = new Cookies();
 
@@ -18,11 +19,41 @@ class Idea extends Component {
             username: cookies.get('username'),
             postId: this.props.match.params.postId,
             voted: false,
-            saved: false
+            saved: false,
+            newComment: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent()))
         }
 
         this.toggleSave = this.toggleSave.bind(this);
         this.toggleVote = this.toggleVote.bind(this);
+        this.submitComment = this.submitComment.bind(this);
+    }
+
+    submitComment(e){
+        e.preventDefault();
+        e.stopPropagation();
+        const newCommentData = {
+            author: this.state.uid,
+            authorName: this.state.username,
+            parentPost: this.state.post._id,
+            content: this.state.newComment
+        }
+        fetch('http://localhost:8000/comments', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newCommentData)
+            })
+            .then(res => res.json())
+            .then(comment => {
+                let comments = this.state.comments;
+                comments.push(comment);
+                this.setState({comments: comments});
+            })
+            .catch(err => {
+                console.error(err);
+            });
+
     }
 
     async toggleSave(){
@@ -55,10 +86,18 @@ class Idea extends Component {
                 })
             })
             .catch(err => this.setState({post: undefined}));
+
+        fetch(`http://localhost:8000/posts/${this.state.postId}/comments`)
+            .then(res => res.json())
+            .then(comments => {
+                this.setState({comments: comments});
+            })
+            .catch(err => this.setState({comments: undefined}));
+
     }
 
     render() {
-        if(!this.state.post){
+        if(!this.state.post || !this.state.comments){
             return (
                 <div className="container-fluid">
                     <ZgNav />
@@ -70,7 +109,6 @@ class Idea extends Component {
             )
         } else {
             console.log(this.state);
-
 
             return (
                 <div className="container-fluid">
@@ -109,7 +147,7 @@ class Idea extends Component {
                             />
                         </div>
 
-                        <h1 className="idea-content-title">Possibility</h1>
+                        <h1 className="idea-content-title">Feasibility</h1>
                         <div className="idea-content">
                             <Editor
                                 editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.feasibility)))}
@@ -139,9 +177,18 @@ class Idea extends Component {
                             size="2em" color={this.state.voted? "#00966e": "#ccc"}
                             onClick={this.toggleVote}
                         />
-                    
                     </div>
 
+                    <div className="idea-newComment">
+                        <MyEditor 
+                            placeholder="Questions? Comments? Concerns?"
+                            editorState={this.state.newComment}
+                            update={(editorState) => this.setState({newComment: editorState})}
+                        />
+                        <Button type="submit" onClick={this.submitComment} className="idea-comment-submit">Add Comment</Button>
+                        <hr />
+                    </div>
+                    <p>{this.state.comments.length} Comments</p>
                 </div>
                 
             )

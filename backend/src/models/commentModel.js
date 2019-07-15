@@ -4,10 +4,11 @@ const User = require('./userModel');
 const Post = require('./postModel');
 
 const commentSchema = new Schema({
-  author: {type: Schema.Types.ObjectId},
-  content: {type: String, required: true},
+  author: {type: Schema.Types.ObjectId, required: true},
+  authorName: {type: String, required: true},
+  content: {type: Schema.Types.Mixed, required: true},
   votes: {type: Number, default:0},
-  parentComment: Schema.Types.ObjectId,
+  parentComment: {type: Schema.Types.ObjectId, default: null},
   parentPost: {type: Schema.Types.ObjectId, required:true},
   dateCreated: {type: Number, default: Date.now()},
   voters: {type: [Schema.Types.ObjectId], default: []},

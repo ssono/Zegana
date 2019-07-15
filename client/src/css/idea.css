@@ -43,10 +43,29 @@ hr {
 }
 
 .idea-footer {
-    margin: 2% 5%;
+    margin: 0% 5% 2% 5%;
 }
 
 .idea-footer-section {
     display: inline-block;
     margin-right: 5%;
+}
+
+.idea-newComment h1{
+    color: #00966e;
+    font-size: 1.5em;
+}
+
+.idea-newComment .editorWrap{
+    border-color: #9dabb9;
+}
+
+.idea-newComment{
+    margin: 2% 5%;
+}
+
+.idea-comment-submit {
+    margin: 3% 0%;
+    background-color: #00966e;
+    border-color: #00966e;
 }
