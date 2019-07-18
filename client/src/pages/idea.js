@@ -1,13 +1,29 @@
 import React, { Component } from 'react';
 import '../css/idea.css';
-import ZgNav from './zgNav';
+import ZgNav from '../components/zgNav';
 import { Editor, convertFromRaw, EditorState, convertToRaw } from 'draft-js';
-import MyEditor from './editor';
+import MyEditor from '../components/editor';
+import Comment from '../components/comment';
 import { Cookies } from 'react-cookie';
 import { FaBookmark, FaArrowCircleUp } from 'react-icons/fa';
 import { Button } from 'react-bootstrap';
 
 const cookies = new Cookies();
+
+function timeDiffString(created){
+    const tdiff = Date.now() - created;
+    if(tdiff < 1000*60){
+        return '<1min';
+    } else if(tdiff < 1000*60*60){
+        return `${Math.floor(tdiff/(1000*60))} min`;
+    } else if(tdiff < 1000*60*60*24){
+        return `${Math.floor(tdiff/(1000*60*60))} hr`;
+    } else if(tdiff < 1000*60*60*24*30){
+        return `${Math.floor(tdiff/(1000*60*60*24))} days`;
+    } else {
+        return Date(created).slice(4,15);
+    }
+}
 
 class Idea extends Component {
 
@@ -20,7 +36,8 @@ class Idea extends Component {
             postId: this.props.match.params.postId,
             voted: false,
             saved: false,
-            newComment: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent()))
+            newComment: EditorState.createEmpty(),
+            inputVisible: true
         }
 
         this.toggleSave = this.toggleSave.bind(this);
@@ -31,11 +48,18 @@ class Idea extends Component {
     submitComment(e){
         e.preventDefault();
         e.stopPropagation();
+
+        if(!this.state.newComment.getCurrentContent().hasText()){
+            alert('Comment must have content');
+            return;
+        }
+
         const newCommentData = {
             author: this.state.uid,
             authorName: this.state.username,
             parentPost: this.state.post._id,
-            content: this.state.newComment
+            content: JSON.stringify(convertToRaw(this.state.newComment.getCurrentContent())),
+            dateCreated: Date.now()
         }
         fetch('http://localhost:8000/comments', {
             method: 'POST',
@@ -48,11 +72,16 @@ class Idea extends Component {
             .then(comment => {
                 let comments = this.state.comments;
                 comments.push(comment);
-                this.setState({comments: comments});
+                this.setState({
+                    comments: comments,
+                    inputVisible: false
+                });
             })
             .catch(err => {
                 console.error(err);
             });
+
+        
 
     }
 
@@ -109,6 +138,16 @@ class Idea extends Component {
             )
         } else {
             console.log(this.state);
+            const commentBlocks = this.state.comments.map(comment => {
+                return (
+                    <Comment 
+                        visible={true}
+                        comment={comment}
+                        key={comment._id}
+                    />
+                )
+            })
+            
 
             return (
                 <div className="container-fluid">
@@ -116,7 +155,7 @@ class Idea extends Component {
                     <div className="idea-header">
                         <h1 className="idea-title">{this.state.post.title}</h1>
                         <p className="idea-subtitle">By: anon</p>
-                        <p className="idea-subtitle">{Date(this.state.post.dateCreated).slice(4,15)}</p>
+                        <p className="idea-subtitle">{timeDiffString(this.state.post.dateCreated)}</p>
                         <hr/>
                     </div>
                     
@@ -169,26 +208,35 @@ class Idea extends Component {
                         <p className="idea-votes idea-footer-section">{this.state.post.votes} votes</p>
                         <FaBookmark 
                             className="idea-footer-section" 
-                            size="2em" color={this.state.saved? "#00966e": "#ccc"} 
+                            size="1.7em" 
+                            color={this.state.saved? "#00966e": "#999"} 
                             onClick={this.toggleSave}
                         />
                         <FaArrowCircleUp 
                             className="idea-footer-section" 
-                            size="2em" color={this.state.voted? "#00966e": "#ccc"}
+                            size="1.7em" 
+                            color={this.state.voted? "#00966e": "#999"}
                             onClick={this.toggleVote}
                         />
                     </div>
 
                     <div className="idea-newComment">
-                        <MyEditor 
-                            placeholder="Questions? Comments? Concerns?"
-                            editorState={this.state.newComment}
-                            update={(editorState) => this.setState({newComment: editorState})}
-                        />
-                        <Button type="submit" onClick={this.submitComment} className="idea-comment-submit">Add Comment</Button>
-                        <hr />
+                        <h1>Comments</h1>
+                        <div hidden={!this.state.inputVisible}>    
+                            <MyEditor 
+                                placeholder="Questions? Comments? Contributions?"
+                                editorState={this.state.newComment}
+                                update={(editorState) => this.setState({newComment: editorState})}
+                            />
+                            <Button type="submit" onClick={this.submitComment} className="idea-comment-submit">Add Comment</Button>
+                        </div>
+                        <hr/>
                     </div>
-                    <p>{this.state.comments.length} Comments</p>
+
+                    <div className="idea-comments">
+                        {commentBlocks}
+                    </div>
+
                 </div>
                 
             )

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Editor, EditorState, RichUtils, getDefaultKeyBinding, convertToRaw} from 'draft-js';
+import {Editor, EditorState, RichUtils, getDefaultKeyBinding} from 'draft-js';
 import '../css/editor.css';
 
 class MyEditor extends React.Component {
@@ -12,7 +12,7 @@ class MyEditor extends React.Component {
 
     this.onChange = (editorState) => {
       this.setState({editorState});
-      this.props.update(JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())));
+      this.props.update(this.state.editorState);
     }
 
     this.setEditor = (editor) => {

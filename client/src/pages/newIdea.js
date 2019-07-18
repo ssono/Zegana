@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { EditorState, convertToRaw} from 'draft-js';
 import '../css/newIdea.css';
-import ZgNav from './zgNav';
-import MyEditor from './editor';
+import ZgNav from '../components/zgNav';
+import MyEditor from '../components/editor';
 import { Cookies } from 'react-cookie';
 
 const problemPlaceholder= 'What is the problem?\nWho does it impact?';
@@ -20,11 +20,11 @@ class NewIdea extends Component {
 
         this.state = {
             title: '',
-            problem: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent())),
-            solution: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent())),
-            plan: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent())),
-            feasibility: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent())),
-            help: JSON.stringify(convertToRaw(EditorState.createEmpty().getCurrentContent())),
+            problem: EditorState.createEmpty(),
+            solution: EditorState.createEmpty(),
+            plan: EditorState.createEmpty(),
+            feasibility: EditorState.createEmpty(),
+            help: EditorState.createEmpty(),
             uid: cookies.get('uid'),
             username: cookies.get('username')
         };
@@ -43,11 +43,11 @@ class NewIdea extends Component {
         e.stopPropagation();
         const newPost = {
             title: this.state.title,
-            problem: this.state.problem,
-            solution: this.state.solution,
-            plan: this.state.plan,
-            feasibility: this.state.feasibility,
-            help: this.state.help,
+            problem: JSON.stringify(convertToRaw(this.state.problem.getCurrentContent())),
+            solution: JSON.stringify(convertToRaw(this.state.solution.getCurrentContent())),
+            plan: JSON.stringify(convertToRaw(this.state.plan.getCurrentContent())),
+            feasibility: JSON.stringify(convertToRaw(this.state.feasibility.getCurrentContent())),
+            help: JSON.stringify(convertToRaw(this.state.help.getCurrentContent())),
             author: this.state.uid
         }
 

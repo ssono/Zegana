@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { Route, BrowserRouter as Router } from 'react-router-dom'
 import App from './App';
-import Posts from './components/posts';
-import NewIdea from './components/newIdea';
-import Idea from './components/idea';
+import Posts from './pages/posts';
+import NewIdea from './pages/newIdea';
+import Idea from './pages/idea';
 import * as serviceWorker from './serviceWorker';
 
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../css/posts.css';
-import ZgNav from './zgNav';
+import ZgNav from '../components/zgNav';
 
 class Posts extends Component {
     constructor(props) {
