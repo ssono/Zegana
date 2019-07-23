@@ -19,7 +19,7 @@ function timeDiffString(created){
     } else if(tdiff < 1000*60*60*24){
         return `${Math.floor(tdiff/(1000*60*60))} hrs`;
     } else if(tdiff < 1000*60*60*24*30){
-        return `${Math.floor(tdiff/(1000*60*60*24))} days ago`;
+        return `${Math.floor(tdiff/(1000*60*60*24))} days`;
     } else {
         return Date(created).slice(4,15);
     }
@@ -156,7 +156,7 @@ class Idea extends Component {
                     <div className="idea-header">
                         <h1 className="idea-title">{this.state.post.title}</h1>
                         <p className="idea-subtitle">By: anon</p>
-                        <p className="idea-subtitle">{timeDiffString(this.state.post.dateCreated)}</p>
+                        <p className="idea-subtitle">submitted {timeDiffString(this.state.post.dateCreated)} ago</p>
                         <hr/>
                     </div>
                     

@@ -14,7 +14,7 @@ function timeDiffString(created){
     } else if(tdiff < 1000*60*60*24){
         return `${Math.floor(tdiff/(1000*60*60))} hrs`;
     } else if(tdiff < 1000*60*60*24*30){
-        return `${Math.floor(tdiff/(1000*60*60*24))} days ago`;
+        return `${Math.floor(tdiff/(1000*60*60*24))} days`;
     } else {
         return Date(created).slice(4,15);
     }
@@ -141,7 +141,7 @@ class Comment extends Component {
                 <div className="comment-wrap" onClick={this.toggleReplies}>
                     <span className="comment-header">
                         <p className="comment-author">{this.state.comment.authorName}</p>
-                        <p className="comment-date">{timeDiffString(this.state.comment.dateCreated)}</p>
+                        <p className="comment-date">submitted {timeDiffString(this.state.comment.dateCreated)} ago</p>
                         <p className="comment-votes">{this.state.comment.votes} votes</p>
                     </span>
 

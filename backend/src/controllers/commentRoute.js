@@ -161,7 +161,7 @@ router.get('/comments/:ObjectId/pcomment', async function(req, res){
 
 //get replies
 router.get('/comments/:ObjectId/replies', function(req, res) {
-  Comment.find({parentComment: req.params.ObjectId})
+  Comment.find({parentComment: req.params.ObjectId}).sort({votes: -1})
     .then(comments => {
       return res.status(200).json(comments);
     })

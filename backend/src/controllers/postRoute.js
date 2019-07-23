@@ -35,9 +35,9 @@ router.post('/posts', function (req, res) {
 
 });
 
-//get all posts
+//get 25 posts
 router.get('/posts', function (req, res) {
-  Post.find().limit(10)
+  Post.find().sort({dateCreated: -1}).limit(25)
     .then(posts => {
       return res.status(200).json(posts);
     })
@@ -154,9 +154,9 @@ router.get('/posts/:ObjectId/voters', async function (req, res) {
   return res.status(200).json(voters);
 });
 
-//get immediate children comment instances
+//get immediate children comment instances sorted best
 router.get('/posts/:ObjectId/comments', function (req, res) {
-  Comment.find({ parentPost: req.params.ObjectId, parentComment: null })
+  Comment.find({ parentPost: req.params.ObjectId, parentComment: null }).sort({votes: -1})
     .then(comments => {
       return res.status(200).json(comments);
     })
