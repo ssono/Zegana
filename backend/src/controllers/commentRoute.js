@@ -16,7 +16,10 @@ router.post('/comments', function(req, res) {
     return res.status(400).send("body is missing");
   }
 
-  let newComment = Comment(req.body);
+  let newComment = req.body;
+  newComment.dateCreated = Date.now();
+  newComment = Comment(newComment);
+  
   newComment.save()
     .then(async comment => {
       if(!comment || comment.length === 0){
@@ -88,6 +91,7 @@ router.get('/comments/:ObjectId/vote/:voterId', function(req, res){
 
       //get the update data for new votes and voters
       let data = await comment.voteUpdateData(voterId);
+      data.lastUpdated = Date.now();
       Comment.findByIdAndUpdate(req.params.ObjectId, data, {new: true})
         .then(comment => {
           return res.status(200).json(comment);

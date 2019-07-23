@@ -14,7 +14,6 @@
 .comment-author{
     color: #00966e;
     font-weight: bold;
-    padding-right: 5%;
 }
 
 .comment-content-wrap {
@@ -22,6 +21,11 @@
 }
 
 .comment-date {
+    color: #999;
+    padding: 0% 5%;
+}
+
+.comment-votes{
     color: #999;
 }
 
@@ -39,7 +43,18 @@
     margin-right: 5%;
 }
 
-.comment-comments{
+.comment-numreplies{
     color: #999;
     display: inline-block;
+}
+
+.comment-reply-submit{
+    background-color: #00966e;
+    border-color: #00966e;
+    margin: 3% 0%;
+}
+
+.comment-replies{
+    padding-left: 4%;
+    border-left: 1px solid #ddd;
 }

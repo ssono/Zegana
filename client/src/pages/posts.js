@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import '../css/posts.css';
 import ZgNav from '../components/zgNav';
+import { Cookies } from 'react-cookie';
+
+const cookies = new Cookies();
 
 class Posts extends Component {
     constructor(props) {

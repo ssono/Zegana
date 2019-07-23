@@ -15,11 +15,11 @@ function timeDiffString(created){
     if(tdiff < 1000*60){
         return '<1min';
     } else if(tdiff < 1000*60*60){
-        return `${Math.floor(tdiff/(1000*60))} min`;
+        return `${Math.floor(tdiff/(1000*60))} mins`;
     } else if(tdiff < 1000*60*60*24){
-        return `${Math.floor(tdiff/(1000*60*60))} hr`;
+        return `${Math.floor(tdiff/(1000*60*60))} hrs`;
     } else if(tdiff < 1000*60*60*24*30){
-        return `${Math.floor(tdiff/(1000*60*60*24))} days`;
+        return `${Math.floor(tdiff/(1000*60*60*24))} days ago`;
     } else {
         return Date(created).slice(4,15);
     }
@@ -58,8 +58,7 @@ class Idea extends Component {
             author: this.state.uid,
             authorName: this.state.username,
             parentPost: this.state.post._id,
-            content: JSON.stringify(convertToRaw(this.state.newComment.getCurrentContent())),
-            dateCreated: Date.now()
+            content: JSON.stringify(convertToRaw(this.state.newComment.getCurrentContent()))
         }
         fetch('http://localhost:8000/comments', {
             method: 'POST',
@@ -137,13 +136,15 @@ class Idea extends Component {
                 </div>
             )
         } else {
-            console.log(this.state);
+            // console.log(this.state);
             const commentBlocks = this.state.comments.map(comment => {
                 return (
                     <Comment 
                         visible={true}
                         comment={comment}
                         key={comment._id}
+                        uid={this.state.uid}
+                        username={this.state.username}
                     />
                 )
             })

@@ -17,7 +17,10 @@ router.post('/posts', function (req, res) {
     return res.status(400).send("body is missing")
   }
 
-  let newPost = Post(req.body);
+  let newPost = req.body;
+  newPost.dateCreated = Date.now();
+  newPost = Post(newPost);
+  
   newPost.save()
     .then(post => {
       if (!post || post.length === 0) {
