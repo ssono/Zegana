@@ -49,7 +49,7 @@ class Signup extends Component {
       event.preventDefault();
       event.stopPropagation();
 
-      if(this.state.username === 'anon'){
+      if(this.state.username === 'OP'){
         return this.setState({
           availableUsername: false
         })
