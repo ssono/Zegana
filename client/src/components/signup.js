@@ -42,14 +42,18 @@ class Signup extends Component {
 
   submitSignup(event) {
     const form = event.currentTarget;
-    console.log(cookies.get('uid'));
-    console.log(cookies.get('username'));
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     } else {
       event.preventDefault();
       event.stopPropagation();
+
+      if(this.state.username === 'anon'){
+        return this.setState({
+          availableUsername: false
+        })
+      }
 
       let data = {
         email: this.state.email,

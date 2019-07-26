@@ -140,6 +140,7 @@ class Idea extends Component {
             const commentBlocks = this.state.comments.map(comment => {
                 return (
                     <Comment 
+                        postAuthor={this.state.post.author}
                         visible={true}
                         comment={comment}
                         key={comment._id}
@@ -155,7 +156,7 @@ class Idea extends Component {
                     <ZgNav />
                     <div className="idea-header">
                         <h1 className="idea-title">{this.state.post.title}</h1>
-                        <p className="idea-subtitle">By: anon</p>
+                        <p className="idea-subtitle">By: OP</p>
                         <p className="idea-subtitle">submitted {timeDiffString(this.state.post.dateCreated)} ago</p>
                         <hr/>
                     </div>

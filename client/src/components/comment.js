@@ -28,6 +28,7 @@ class Comment extends Component {
         this.state = {
             uid: this.props.uid,
             username: this.props.username,
+            postAuthor: this.props.postAuthor,
             comment: this.props.comment,
             visible: this.props.visible,
             inputVisible: false,
@@ -123,9 +124,9 @@ class Comment extends Component {
         let replies = [];
         if(this.state.replies !== undefined){
             replies = this.state.replies.map(reply => {
-                console.log('REPL', reply);
                 return(
                     <Comment 
+                        postAuthor={this.state.postAuthor}
                         visible={this.state.childrenVisible && this.state.visible}
                         comment={reply}
                         key={reply._id}
@@ -140,7 +141,7 @@ class Comment extends Component {
             <div className="comment-outer" hidden={!this.state.visible}>
                 <div className="comment-wrap" onClick={this.toggleReplies}>
                     <span className="comment-header">
-                        <p className="comment-author">{this.state.comment.authorName}</p>
+                        <p className="comment-author">{this.state.comment.author === this.state.postAuthor ? 'OP' : this.state.comment.authorName}</p>
                         <p className="comment-date">submitted {timeDiffString(this.state.comment.dateCreated)} ago</p>
                         <p className="comment-votes">{this.state.comment.votes} votes</p>
                     </span>
