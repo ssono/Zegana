@@ -7,6 +7,7 @@ import App from './App';
 import Posts from './pages/posts';
 import NewIdea from './pages/newIdea';
 import Idea from './pages/idea';
+import Profile from './pages/profile';
 import * as serviceWorker from './serviceWorker';
 
 
@@ -16,6 +17,7 @@ const routing = (
     <Route exact path="/posts" component={Posts}/>
     <Route exact path="/newIdea" component={NewIdea}/>
     <Route exact path="/idea/:postId" component={Idea}/>
+    <Route exact path="/account/profile" component={Profile}/>
   </Router>
 )
 

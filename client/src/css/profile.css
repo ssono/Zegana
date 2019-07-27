@@ -1,0 +1,30 @@
+.profile-main{
+    margin: 5%;
+}
+
+.profile-title{
+    font-size: 1.5em;
+}
+
+.profile-list {
+    list-style-type: none;
+}
+
+.profile-stat-label {
+    color: #00966e;
+}
+
+.profile-delete{
+    background-color: #00966e;
+    border: 1px solid #00966e;
+}
+
+.profile-delete:active{
+    background-color: #00966e;
+    border: 1px solid #00966e;
+}
+
+.profile-delete:hover{
+    background-color: #00966e;
+    border: 1px solid #00966e;
+}

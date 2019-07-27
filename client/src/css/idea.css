@@ -43,7 +43,7 @@ hr {
 }
 
 .idea-footer {
-    margin: 0% 5% 2% 5%;
+    margin: 0% 5% 10% 5%;
 }
 
 .idea-footer-section {
@@ -79,6 +79,3 @@ hr {
     font-size: 0.8em;
 }
 
-.ideatest{
-    border-left: 2px solid #00966e;
-}

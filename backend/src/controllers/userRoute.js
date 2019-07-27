@@ -113,7 +113,8 @@ router.put('/users/:ObjectId', function (req, res) {
 router.delete('/users/:ObjectId', function (req, res) {
   User.findByIdAndDelete(req.params.ObjectId, {})
     .then(() => {
-      return res.status(202).send("successfully deleted");
+      console.log('success');
+      return res.status(202).json({status: 202});
     })
     .catch(err => {
       return res.status(500).json(err);

@@ -61,15 +61,14 @@ class Zgnav extends Component {
         if(this.state.uid){
             navOptions = (
                 <Nav className="ml-auto" variant="pills">
-                    <NavDropdown title="Account" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">Ideas</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.3">Comments</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4" onClick={this.logout}>Logout</NavDropdown.Item>
-                    </NavDropdown>
                     <Nav.Link href="/newIdea">Share Idea</Nav.Link>
-                    <Nav.Link href="#notif">Notifications</Nav.Link>
+                    <Nav.Link>Notifications</Nav.Link>
+                    <NavDropdown title="Account" id="basic-nav-dropdown">
+                        <NavDropdown.Item href="/account/profile">Profile</NavDropdown.Item>
+                        <NavDropdown.Item href="/account/ideas">Ideas</NavDropdown.Item>
+                        <NavDropdown.Item href="/account/comments">Comments</NavDropdown.Item>
+                    </NavDropdown>
+                    <Nav.Link onClick={this.logout}>Logout</Nav.Link>
                     
                 </Nav>
             )
