@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
-import '../css/profile.css';
+import '../css/myIdeas.css';
 import ZgNav from '../components/zgNav';
 import { Cookies } from 'react-cookie';
 import { Button } from 'react-bootstrap';
 
 const cookies = new Cookies();
 
-class Profile extends Component {
+class MyIdeas extends Component {
     constructor(props){
         super(props);
 
         this.state = {
             uid: cookies.get('uid'),
-            username: cookies.get('username')
+            username: cookies.get('username'),
+            sorting: this.props.match.params.sorting
 
         };
 
-        this.deleteAccount = this.deleteAccount.bind(this);
     }
 
     componentWillMount() {
@@ -26,23 +26,6 @@ class Profile extends Component {
             .catch(err => this.setState({user: null}));
     }
 
-    deleteAccount() {
-        fetch('http://localhost:8000/users/' + this.state.uid, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-            })
-            .then(res => res.json())
-            .then(res => {
-                cookies.remove('uid', {path: '/'});
-                cookies.remove('username', {path: '/'});
-                window.location.href = '/posts/new/1';
-            })
-            .catch(err => console.log(err));
-
-        console.log('Account Deleted');
-    }
 
     render() {
         console.log(this.state);
@@ -76,4 +59,4 @@ class Profile extends Component {
 
 }
 
-export default Profile;
+export default MyIdeas;

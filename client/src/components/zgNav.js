@@ -44,7 +44,7 @@ class Zgnav extends Component {
     logout() {
         cookies.remove('uid', {path: '/'});
         cookies.remove('username', {path: '/'});
-        window.location.href = '/posts';
+        window.location.href = '/posts/new/1';
     }
 
     render() {
@@ -65,8 +65,9 @@ class Zgnav extends Component {
                     <Nav.Link>Notifications</Nav.Link>
                     <NavDropdown title="Account" id="basic-nav-dropdown">
                         <NavDropdown.Item href="/account/profile">Profile</NavDropdown.Item>
-                        <NavDropdown.Item href="/account/ideas">Ideas</NavDropdown.Item>
-                        <NavDropdown.Item href="/account/comments">Comments</NavDropdown.Item>
+                        <NavDropdown.Item href="/account/saved/top">Saved Ideas</NavDropdown.Item>
+                        <NavDropdown.Item href="/account/myIdeas/top">My Ideas</NavDropdown.Item>
+                        <NavDropdown.Item href="/account/comments/top">My Comments</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link onClick={this.logout}>Logout</Nav.Link>
                     
@@ -76,7 +77,7 @@ class Zgnav extends Component {
 
         return (
             <Navbar collapseOnSelect expand="lg" variant="dark" className="bg-custom">
-                <Navbar.Brand href="/posts" id="zg-brand">Zegana</Navbar.Brand>
+                <Navbar.Brand href="/posts/new/1" id="zg-brand">Zegana</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     {navOptions}

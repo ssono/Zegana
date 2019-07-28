@@ -74,7 +74,7 @@ class Signup extends Component {
             let user = json;
             cookies.set('uid', user._id, {path: '/'});
             cookies.set('username', user.username, {path: '/'});
-            window.location.href= '/posts';
+            window.location.href= '/posts/new/1';
 
           } else if (res.status === 409) {
             this.setState({

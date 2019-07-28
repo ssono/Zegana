@@ -8,16 +8,18 @@ import Posts from './pages/posts';
 import NewIdea from './pages/newIdea';
 import Idea from './pages/idea';
 import Profile from './pages/profile';
+import MyIdeas from './pages/myIdeas';
 import * as serviceWorker from './serviceWorker';
 
 
 const routing = (
   <Router>
     <Route exact path="/" component={App}/>
-    <Route exact path="/posts" component={Posts}/>
+    <Route exact path="/posts/:sorting/:page" component={Posts}/>
     <Route exact path="/newIdea" component={NewIdea}/>
     <Route exact path="/idea/:postId" component={Idea}/>
     <Route exact path="/account/profile" component={Profile}/>
+    <Route exact path="/account/myIdeas/:sorting" component={MyIdeas}/>
   </Router>
 )
 
