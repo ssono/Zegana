@@ -48,7 +48,7 @@ class App extends Component {
     let uid = cookies.get('uid');
     if(uid){
       return(
-        <Redirect push to="/posts" />
+        <Redirect push to="/posts/new/1" />
       )
     }
     return (

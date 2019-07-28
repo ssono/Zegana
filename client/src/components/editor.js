@@ -6,7 +6,7 @@ class MyEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: EditorState.createEmpty(),
+      editorState: this.props.editorState || EditorState.createEmpty(),
       focused: false
     };
 

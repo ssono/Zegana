@@ -64,7 +64,7 @@ class Login extends Component {
                             cookies.set('username', user.username, {path: '/'});
                         }
 
-                        window.location.href ='/posts';
+                        window.location.href ='/posts/new/1';
 
                     } else if (res.status === 404 || res.status === 401) {
                         this.setState({
