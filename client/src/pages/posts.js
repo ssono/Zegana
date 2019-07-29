@@ -3,7 +3,11 @@ import '../css/posts.css';
 import ZgNav from '../components/zgNav';
 import { Cookies } from 'react-cookie';
 import IdeaSlug from '../components/ideaSlug';
+<<<<<<< HEAD
 import { Dropdown } from 'react-bootstrap';
+=======
+import { Button } from 'react-bootstrap';
+>>>>>>> b6040fe9ba6a894dcb595e6cc8ad287ddd71b9e5
 
 const cookies = new Cookies();
 
