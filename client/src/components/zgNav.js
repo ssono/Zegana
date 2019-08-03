@@ -62,12 +62,12 @@ class Zgnav extends Component {
             navOptions = (
                 <Nav className="ml-auto" variant="pills">
                     <Nav.Link href="/newIdea">Share Idea</Nav.Link>
-                    <Nav.Link>Notifications</Nav.Link>
+                    {/* <Nav.Link>Notifications</Nav.Link> */}
                     <NavDropdown title="Account" id="basic-nav-dropdown">
                         <NavDropdown.Item href="/account/profile">Profile</NavDropdown.Item>
-                        <NavDropdown.Item href="/account/saved/top">Saved Ideas</NavDropdown.Item>
-                        <NavDropdown.Item href="/account/myIdeas/top">My Ideas</NavDropdown.Item>
-                        <NavDropdown.Item href="/account/comments/top">My Comments</NavDropdown.Item>
+                        <NavDropdown.Item href="/account/saved/new/1">Saved Ideas</NavDropdown.Item>
+                        <NavDropdown.Item href="/account/myIdeas/top/1">My Ideas</NavDropdown.Item>
+                        <NavDropdown.Item href="/account/myComments/top/1">My Comments</NavDropdown.Item>
                     </NavDropdown>
                     <Nav.Link onClick={this.logout}>Logout</Nav.Link>
                     

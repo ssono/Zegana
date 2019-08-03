@@ -1,0 +1,12 @@
+#editIdea-wrapper {
+    margin: 2% 5%;
+}
+
+#editIdea-wrapper .form-label{
+    font-size: 1.5rem;
+    color: #00966e;
+}
+
+.edit-title {
+    font-size: 1.3em;
+}

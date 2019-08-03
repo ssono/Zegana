@@ -144,26 +144,185 @@ router.get('/users/:ObjectId/posts', function (req, res) {
     })
 });
 
-//get saved posts
-router.get('/users/:ObjectId/saved', async function (req, res) {
-  let user = await User.findById(req.params.ObjectId)
+// get saved new
+router.get('/users/:ObjectId/saved/new/:page', async function (req, res) {
+  const user = await User.findById(req.params.ObjectId)
     .catch(err => {
-      console.log(err);
+      console.error(err);
       return res.status(500).json(err);
-    });
+    })
 
-  let posts = [];
+  let options = {
+    '_id': { $in: user.savedPosts}
+    };
 
-  for (let i = 0; i < user.savedPosts.length; i += 1) {
-    let post = await Post.findById(user.savedPosts[i])
-      .catch(err => {
-        console.log(err);
-        return res.status(500).json(err);
-      })
-    posts.push(post);
-  }
-
-  return res.status(200).json(posts);
+  const posts = Post.find(options)
+    .sort({dateCreated: -1})
+    .limit(25)
+    .skip(25 * (parseInt(req.params.page) - 1))
+    .then(posts => {
+      return res.status(200).json(posts);
+    }).catch(err => {
+      console.error(err);
+      res.status(500).json(err);
+    })
 });
+
+// get saved topday
+router.get('/users/:ObjectId/saved/topDay/:page', async function (req, res) {
+  const user = await User.findById(req.params.ObjectId)
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json(err);
+    })
+
+  const dayAgo = Date.now() - 1000*60*60*24;
+
+  const options = {
+    '_id': { $in: user.savedPosts},
+    dateCreated: { $gte: dayAgo}
+    };
+
+  const posts = Post.find(options)
+    .sort({votes: -1})
+    .limit(25)
+    .skip(25 * (parseInt(req.params.page) - 1))
+    .then(posts => {
+      return res.status(200).json(posts);
+    }).catch(err => {
+      console.error(err);
+      res.status(500).json(err);
+    })
+});
+
+// get saved topweek
+router.get('/users/:ObjectId/saved/topWeek/:page', async function (req, res) {
+  const user = await User.findById(req.params.ObjectId)
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json(err);
+    })
+
+    const weekAgo = Date.now() - 1000*60*60*24*7;
+
+    const options = {
+      '_id': { $in: user.savedPosts},
+      dateCreated: { $gte: weekAgo}
+      };
+
+  const posts = Post.find(options)
+    .sort({votes: -1})
+    .limit(25)
+    .skip(25 * (parseInt(req.params.page) - 1))
+    .then(posts => {
+      return res.status(200).json(posts);
+    }).catch(err => {
+      console.error(err);
+      res.status(500).json(err);
+    })
+});
+
+// get saved topMonth
+router.get('/users/:ObjectId/saved/topMonth/:page', async function (req, res) {
+  const user = await User.findById(req.params.ObjectId)
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json(err);
+    })
+
+    const monthAgo = Date.now() - 1000*60*60*24*30;
+
+    const options = {
+      '_id': { $in: user.savedPosts},
+      dateCreated: { $gte: monthAgo}
+      };
+
+  const posts = Post.find(options)
+    .sort({votes: -1})
+    .limit(25)
+    .skip(25 * (parseInt(req.params.page) - 1))
+    .then(posts => {
+      return res.status(200).json(posts);
+    }).catch(err => {
+      console.error(err);
+      res.status(500).json(err);
+    })
+});
+
+// get saved topYear
+router.get('/users/:ObjectId/saved/topYear/:page', async function (req, res) {
+  const user = await User.findById(req.params.ObjectId)
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json(err);
+    })
+
+    const yearAgo = Date.now() - 1000*60*60*24*365;
+
+    const options = {
+      '_id': { $in: user.savedPosts},
+      dateCreated: { $gte: yearAgo}
+      };
+
+  const posts = Post.find(options)
+    .sort({votes: -1})
+    .limit(25)
+    .skip(25 * (parseInt(req.params.page) - 1))
+    .then(posts => {
+      return res.status(200).json(posts);
+    }).catch(err => {
+      console.error(err);
+      res.status(500).json(err);
+    })
+});
+
+// get saved top
+router.get('/users/:ObjectId/saved/top/:page', async function (req, res) {
+  const user = await User.findById(req.params.ObjectId)
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json(err);
+    })
+
+  const options = {
+    '_id': { $in: user.savedPosts}
+    };
+
+  const posts = Post.find(options)
+    .sort({votes: -1})
+    .limit(25)
+    .skip(25 * (parseInt(req.params.page) - 1))
+    .then(posts => {
+      return res.status(200).json(posts);
+    }).catch(err => {
+      console.error(err);
+      res.status(500).json(err);
+    })
+});
+
+router.get('/users/:ObjectId/saved/active/:page', async function (req, res) {
+  const user = await User.findById(req.params.ObjectId)
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json(err);
+    })
+
+  const options = {
+    '_id': { $in: user.savedPosts}
+    };
+
+  const posts = Post.find(options)
+    .sort({lastUpdated: -1})
+    .limit(25)
+    .skip(25 * (parseInt(req.params.page) - 1))
+    .then(posts => {
+      return res.status(200).json(posts);
+    }).catch(err => {
+      console.error(err);
+      res.status(500).json(err);
+    })
+});
+
+
 
 module.exports = router;

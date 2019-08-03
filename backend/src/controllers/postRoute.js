@@ -36,8 +36,13 @@ router.post('/posts', function (req, res) {
 });
 
 //get new posts
-router.get('/posts/new/:page/:userId?*', function (req, res) {
-  Post.find()
+router.get('/posts/new/:page/:userId*?', function (req, res) {
+  let options = {};
+  if (req.params.userId) {
+    options.author = req.params.userId;
+  }
+
+  Post.find(options)
     .sort({dateCreated: -1})
     .limit(25)
     .skip(25 * (parseInt(req.params.page) -1 ))
@@ -50,10 +55,16 @@ router.get('/posts/new/:page/:userId?*', function (req, res) {
 });
 
 //get topDay posts
-router.get('/posts/topDay/:page/:userId?*', function (req, res) {
+router.get('/posts/topDay/:page/:userId*?', function (req, res) {
   const dayAgo = Date.now() - 1000*60*60*24
-  Post.find({ dateCreated : { $gte: dayAgo }})
-    .sort({dateCreated: -1})
+  let options = { dateCreated : { $gte: dayAgo }};
+  if (req.params.userId) {
+    options.author = req.params.userId;
+  }
+
+
+  Post.find(options)
+    .sort({votes: -1})
     .limit(25)
     .skip(25 * (parseInt(req.params.page) -1 ))
     .then(posts => {
@@ -65,10 +76,15 @@ router.get('/posts/topDay/:page/:userId?*', function (req, res) {
 });
 
 //get topWeek posts
-router.get('/posts/topWeek/:page/:userId?*', function (req, res) {
+router.get('/posts/topWeek/:page/:userId*?', function (req, res) {
   const weekAgo = Date.now() - 1000*60*60*24*7
-  Post.find({ dateCreated : { $gte: weekAgo }})
-    .sort({dateCreated: -1})
+  let options = { dateCreated : { $gte: weekAgo }};
+  if (req.params.userId) {
+    options.author = req.params.userId;
+  }
+
+  Post.find(options)
+    .sort({votes: -1})
     .limit(25)
     .skip(25 * (parseInt(req.params.page) -1 ))
     .then(posts => {
@@ -80,10 +96,15 @@ router.get('/posts/topWeek/:page/:userId?*', function (req, res) {
 });
 
 //get topMonth posts
-router.get('/posts/topMonth/:page/:userId?*', function (req, res) {
+router.get('/posts/topMonth/:page/:userId*?', function (req, res) {
   const monthAgo = Date.now() - 1000*60*60*24*30
-  Post.find({ dateCreated : { $gte: monthAgo }})
-    .sort({dateCreated: -1})
+  let options = { dateCreated : { $gte: monthAgo }}
+  if (req.params.userId) {
+    options.author = req.params.userId;
+  }
+
+  Post.find(options)
+    .sort({votes: -1})
     .limit(25)
     .skip(25 * (parseInt(req.params.page) -1 ))
     .then(posts => {
@@ -95,10 +116,15 @@ router.get('/posts/topMonth/:page/:userId?*', function (req, res) {
 });
 
 //get topYear posts
-router.get('/posts/topYear/:page/:userId?*', function (req, res) {
+router.get('/posts/topYear/:page/:userId*?', function (req, res) {
   const yearAgo = Date.now() - 1000*60*60*24*365
-  Post.find({ dateCreated : { $gte: yearAgo }})
-    .sort({dateCreated: -1})
+  let options = { dateCreated : { $gte: yearAgo }};
+  if (req.params.userId) {
+    options.author = req.params.userId;
+  }
+
+  Post.find(options)
+    .sort({votes: -1})
     .limit(25)
     .skip(25 * (parseInt(req.params.page) -1 ))
     .then(posts => {
@@ -110,8 +136,13 @@ router.get('/posts/topYear/:page/:userId?*', function (req, res) {
 });
 
 //get top all time posts
-router.get('/posts/top/:page/:userId?*', function (req, res) {
-  Post.find()
+router.get('/posts/top/:page/:userId*?', function (req, res) {
+  let options = {};
+  if (req.params.userId) {
+    options.author = req.params.userId;
+  }
+
+  Post.find(options)
     .sort({votes: -1})
     .limit(25)
     .skip(25 * (parseInt(req.params.page) -1 ))
@@ -124,8 +155,12 @@ router.get('/posts/top/:page/:userId?*', function (req, res) {
 });
 
 //get lastUpdated posts
-router.get('/posts/active/:page/:userId?*', function (req, res) {
-  Post.find()
+router.get('/posts/active/:page/:userId*?', function (req, res) {
+  let options = {};
+  if (req.params.userId) {
+    options.author = userId;
+  }
+  Post.find(options)
     .sort({lastUpdated: -1})
     .limit(25)
     .skip(25 * (parseInt(req.params.page) -1 ))
@@ -249,6 +284,18 @@ router.get('/posts/:ObjectId/voters', async function (req, res) {
 //get immediate children comment instances sorted best
 router.get('/posts/:ObjectId/comments', function (req, res) {
   Comment.find({ parentPost: req.params.ObjectId, parentComment: null }).sort({votes: -1})
+    .then(comments => {
+      return res.status(200).json(comments);
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json(err);
+    })
+});
+
+//get immediate children comment instances sorted new
+router.get('/posts/:ObjectId/comments/new', function (req, res) {
+  Comment.find({ parentPost: req.params.ObjectId, parentComment: null }).sort({dateCreated: -1})
     .then(comments => {
       return res.status(200).json(comments);
     })

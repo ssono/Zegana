@@ -3,11 +3,7 @@ import '../css/posts.css';
 import ZgNav from '../components/zgNav';
 import { Cookies } from 'react-cookie';
 import IdeaSlug from '../components/ideaSlug';
-<<<<<<< HEAD
-import { Dropdown } from 'react-bootstrap';
-=======
-import { Button } from 'react-bootstrap';
->>>>>>> b6040fe9ba6a894dcb595e6cc8ad287ddd71b9e5
+import { DropdownButton, Dropdown } from 'react-bootstrap';
 
 const cookies = new Cookies();
 
@@ -80,23 +76,19 @@ class Posts extends Component {
             return(
                 <div className="container-fluid">
                     <ZgNav />
-                    
-                    <div className="post-sort">
-                        <Dropdown className="post-sort-dropdown">
-                            <Dropdown.Toggle variant="custom" id="post-dropdown-toggle">
-                                Sort
-                            </Dropdown.Toggle>
 
-                            <Dropdown.Menu>
-                                <Dropdown.Item href="/posts/new/1">New</Dropdown.Item>
-                                <Dropdown.Item href="/posts/active/1">Active</Dropdown.Item>
-                                <Dropdown.Item href="/posts/top/1">Top All Time</Dropdown.Item>
-                                <Dropdown.Item href="/posts/topYear/1">Top Past Year</Dropdown.Item>
-                                <Dropdown.Item href="/posts/topMonth/1">Top Past Month</Dropdown.Item>
-                                <Dropdown.Item href="/posts/topWeek/1">Top Past Week</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </div>
+                    <DropdownButton 
+                        id="post-sort-dropdown"
+                        title="Sort"
+                    >
+                        <Dropdown.Item href="/posts/new/1">New</Dropdown.Item>
+                        <Dropdown.Item href="/posts/active/1">Active</Dropdown.Item>
+                        <Dropdown.Item href="/posts/top/1">Top All Time</Dropdown.Item>
+                        <Dropdown.Item href="/posts/topYear/1">Top Past Year</Dropdown.Item>
+                        <Dropdown.Item href="/posts/topMonth/1">Top Past Month</Dropdown.Item>
+                        <Dropdown.Item href="/posts/topWeek/1">Top Past Week</Dropdown.Item>
+                        <Dropdown.Item href="/account/topDay/1"> Top Past Day</Dropdown.Item>
+                    </DropdownButton>
 
                     {ideas}
                     <div className="page-navigation">

@@ -45,6 +45,45 @@ router.get('/comments', function(req, res) {
     })
 });
 
+//get top all time comments
+router.get('/comments/top/:page/:userId*?', function (req, res) {
+  let options = {};
+  if (req.params.userId) {
+    options.author = req.params.userId;
+  }
+
+  Comment.find(options)
+    .sort({votes: -1})
+    .limit(25)
+    .skip(25 * (parseInt(req.params.page) -1 ))
+    .then(comments => {
+      return res.status(200).json(comments);
+    })
+    .catch(err => {
+      return res.status(500).json(err);
+    })
+});
+
+//get new
+router.get('/comments/new/:page/:userId*?', function (req, res) {
+  let options = {};
+  if (req.params.userId) {
+    options.author = req.params.userId;
+  }
+
+  Comment.find(options)
+    .sort({dateCreated: -1})
+    .limit(25)
+    .skip(25 * (parseInt(req.params.page) -1 ))
+    .then(comments => {
+      return res.status(200).json(comments);
+    })
+    .catch(err => {
+      return res.status(500).json(err);
+    })
+});
+
+
 //get comment by Id
 router.get('/comments/:ObjectId', function(req, res){
   Comment.findById(req.params.ObjectId)
@@ -159,7 +198,7 @@ router.get('/comments/:ObjectId/pcomment', async function(req, res){
     })
 });
 
-//get replies
+//get top replies
 router.get('/comments/:ObjectId/replies', function(req, res) {
   Comment.find({parentComment: req.params.ObjectId}).sort({votes: -1})
     .then(comments => {

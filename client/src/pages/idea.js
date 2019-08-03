@@ -149,6 +149,8 @@ class Idea extends Component {
                     />
                 )
             })
+
+            const editButton = (<p className="idea-subtitle" id="idea-subtitle-edit" onClick={() => window.location.href += '/edit'}>edit</p>);
             
 
             return (
@@ -158,6 +160,8 @@ class Idea extends Component {
                         <h1 className="idea-title">{this.state.post.title}</h1>
                         <p className="idea-subtitle">By: OP</p>
                         <p className="idea-subtitle">submitted {timeDiffString(this.state.post.dateCreated)} ago</p>
+                        {(this.state.uid === this.state.post.author) ? editButton: null}
+                        
                         <hr/>
                     </div>
                     
@@ -166,8 +170,8 @@ class Idea extends Component {
                         <h1 className="idea-content-title">Problem</h1>
                         <div className="idea-content">
                             <Editor
-                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.problem)))}
                                 readOnly={true}
+                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.problem)))}
                             />
                         </div>
 
@@ -175,32 +179,32 @@ class Idea extends Component {
                         <div className="idea-content">
                             
                             <Editor
-                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.solution)))}
                                 readOnly={true}
+                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.solution)))}
                             />
                         </div>
 
                         <h1 className="idea-content-title">Plan</h1>
                         <div className="idea-content">
                             <Editor
-                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.plan)))}
                                 readOnly={true}
+                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.plan)))}
                             />
                         </div>
 
                         <h1 className="idea-content-title">Feasibility</h1>
                         <div className="idea-content">
                             <Editor
-                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.feasibility)))}
                                 readOnly={true}
+                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.feasibility)))}
                             />
                         </div>
 
                         <h1 className="idea-content-title">How can we make this work?</h1>
                         <div className="idea-content">
                             <Editor
-                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.help)))}
                                 readOnly={true}
+                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.help)))}
                             />
                         </div>
 
@@ -208,18 +212,19 @@ class Idea extends Component {
 
                     <div className="idea-footer">
                         <p className="idea-votes idea-footer-section">{this.state.post.votes} votes</p>
-                        <FaBookmark 
-                            className="idea-footer-section" 
-                            size="1.7em" 
-                            color={this.state.saved? "#00966e": "#999"} 
-                            onClick={this.toggleSave}
-                        />
                         <FaArrowCircleUp 
                             className="idea-footer-section" 
                             size="1.7em" 
                             color={this.state.voted? "#00966e": "#999"}
                             onClick={this.toggleVote}
                         />
+                        <FaBookmark 
+                            className="idea-footer-section" 
+                            size="1.7em" 
+                            color={this.state.saved? "#00966e": "#999"} 
+                            onClick={this.toggleSave}
+                        />
+                        
                     </div>
 
                     <div className="idea-newComment">

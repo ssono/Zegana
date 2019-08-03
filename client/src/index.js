@@ -9,6 +9,10 @@ import NewIdea from './pages/newIdea';
 import Idea from './pages/idea';
 import Profile from './pages/profile';
 import MyIdeas from './pages/myIdeas';
+import MyComments from './pages/myComments';
+import SavedIdeas from './pages/savedIdeas';
+import EditIdea from './pages/editIdea';
+
 import * as serviceWorker from './serviceWorker';
 
 
@@ -19,7 +23,10 @@ const routing = (
     <Route exact path="/newIdea" component={NewIdea}/>
     <Route exact path="/idea/:postId" component={Idea}/>
     <Route exact path="/account/profile" component={Profile}/>
-    <Route exact path="/account/myIdeas/:sorting" component={MyIdeas}/>
+    <Route exact path="/account/myIdeas/:sorting/:page" component={MyIdeas}/>
+    <Route exact path="/account/myComments/:sorting/:page" component={MyComments}/>
+    <Route exact path="/account/saved/:sorting/:page" component={SavedIdeas}/>
+    <Route exact path="/idea/:postId/edit" component={EditIdea}/>
   </Router>
 )
 

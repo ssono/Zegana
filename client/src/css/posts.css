@@ -2,15 +2,17 @@
     padding: 0%;
 }
 
-<<<<<<< HEAD
 
-#post-dropdown-toggle{
+#post-sort-dropdown{
     color: #00966e;
+    background-color: white;
+    border: 1px solid #999;
     font-size: 1.2em;
+    margin: 5% 5% 0% 5%;
+    width: 25%;
 }
 
-=======
->>>>>>> b6040fe9ba6a894dcb595e6cc8ad287ddd71b9e5
+
 .page-navigation span{
     display: inline-block;
     background-color: #00966e;

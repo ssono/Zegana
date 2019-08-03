@@ -35,7 +35,7 @@ class Comment extends Component {
             childrenVisible: false,
             replies: undefined,
             voted: this.props.comment.voters.includes(this.props.uid),
-            newReply: Editor.createEmpty
+            newReply: EditorState.createEmpty()
         }
 
         this.toggleVote = this.toggleVote.bind(this);

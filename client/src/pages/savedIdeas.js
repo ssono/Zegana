@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../css/myIdeas.css';
+import '../css/savedIdeas.css';
 import ZgNav from '../components/zgNav';
 import { Cookies } from 'react-cookie';
 import IdeaSlug from '../components/ideaSlug';
@@ -23,7 +23,7 @@ class Posts extends Component {
     }
 
     componentWillMount(){
-        fetch(`http://localhost:8000/posts/${this.state.sorting}/${this.state.page}/${this.state.uid}`)
+        fetch(`http://localhost:8000/users/${this.state.uid}/saved/${this.state.sorting}/${this.state.page}`)
             .then(res => res.json())
             .then(ideas => {
                 this.setState({
@@ -35,14 +35,14 @@ class Posts extends Component {
 
     navPrev(){
         if (this.state.page !== '1'){
-            const newLoc = `/account/myIdeas/${this.state.sorting}/${parseInt(this.state.page) - 1}/${this.state.uid}`;
+            const newLoc = `/account/saved/${this.state.sorting}/${parseInt(this.state.page) - 1}`;
             window.location.href = newLoc;
         }
     }
 
     navNext(){
         if (this.state.ideas.length > 0){
-            const newLoc = `/account/myIdeas/${this.state.sorting}/${parseInt(this.state.page) + 1}/${this.state.uid}`;
+            const newLoc = `/account/saved/${this.state.sorting}/${parseInt(this.state.page) + 1}`;
             window.location.href = newLoc;
         }
     }
@@ -81,9 +81,9 @@ class Posts extends Component {
                         id="post-sort-dropdown"
                         title="Sort"
                     >
-                        <Dropdown.Item href="/account/myIdeas/new/1">New</Dropdown.Item>
-                        <Dropdown.Item href="/account/myIdeas/active/1">Active</Dropdown.Item>
-                        <Dropdown.Item href="/account/myIdeas/top/1">Top All Time</Dropdown.Item>
+                        <Dropdown.Item href="/account/saved/new/1">New</Dropdown.Item>
+                        <Dropdown.Item href="/account/saved/active/1">Active</Dropdown.Item>
+                        <Dropdown.Item href="/account/saved/top/1">Top All Time</Dropdown.Item>
                     </DropdownButton>
 
                     {ideas}
