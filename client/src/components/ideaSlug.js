@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import '../css/ideaSlug.css';
-import { FaArrowCircleUp } from 'react-icons/fa';
 
 function timeDiffString(created){
     const tdiff = Date.now() - created;
@@ -39,11 +38,6 @@ class IdeaSlug extends Component {
     render() {
         return(
             <div className="idea-slug-wrapper" onClick={this.navToIdea}>
-                <FaArrowCircleUp 
-                    className="idea-slug-vote" 
-                    size="1.25em" 
-                    color={this.state.voted? "#00966e": "#999"}
-                />
                 <p className="idea-slug-title">{this.state.idea.title}</p>
 
                 <p className="idea-slug-info">

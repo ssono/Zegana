@@ -197,18 +197,10 @@ router.put('/posts/:ObjectId', function (req, res) {
 
 //Delete object by Id
 router.delete('/posts/:ObjectId', function (req, res) {
-  Post.findById(req.params.ObjectId, {})
-    .then(post => {
-      post.cleanup();
-    })
-    .catch(err => {
-      console.error(err);
-      return res.status(500).json(err);
-    })
 
   Post.findByIdAndDelete(req.params.ObjectId, {})
     .then(() => {
-      return res.status(202).send("successfully deleted");
+      return res.status(202).json({message: "successfully deleted"});
     })
     .catch(err => {
       return res.status(500).json(err);

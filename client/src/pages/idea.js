@@ -43,6 +43,21 @@ class Idea extends Component {
         this.toggleSave = this.toggleSave.bind(this);
         this.toggleVote = this.toggleVote.bind(this);
         this.submitComment = this.submitComment.bind(this);
+        this.deleteIdea = this.deleteIdea.bind(this);
+    }
+
+    deleteIdea () {
+        fetch(`http://localhost:8000/posts/${this.state.postId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json'}
+        })
+        .then( res => res.json())
+        .then( res => {
+            window.location.href = '/posts/new/1';
+        })
+        .catch(e => {
+            console.error(e);
+        })
     }
 
     submitComment(e){
@@ -150,7 +165,12 @@ class Idea extends Component {
                 )
             })
 
-            const editButton = (<p className="idea-subtitle" id="idea-subtitle-edit" onClick={() => window.location.href += '/edit'}>edit</p>);
+            const editButtons = (
+                <div id="idea-subtitle-second">
+                    <p className="idea-subtitle" id="idea-subtitle-edit" onClick={() => window.location.href += '/edit'}>edit</p>
+                    <p className="idea-subtitle" id="idea-subtitle-delete" onClick={this.deleteIdea}>delete</p>
+                </div>
+            );
             
 
             return (
@@ -160,8 +180,7 @@ class Idea extends Component {
                         <h1 className="idea-title">{this.state.post.title}</h1>
                         <p className="idea-subtitle">By: OP</p>
                         <p className="idea-subtitle">submitted {timeDiffString(this.state.post.dateCreated)} ago</p>
-                        {(this.state.uid === this.state.post.author) ? editButton: null}
-                        
+                        {(this.state.uid === this.state.post.author) ? editButtons: null}
                         <hr/>
                     </div>
                     

@@ -37,15 +37,10 @@
     margin-bottom: 1%;
 }
 
-.comment-reply{
+.comment-subfooter{
     color: #999;
     display: inline-block;
     margin-right: 5%;
-}
-
-.comment-numreplies{
-    color: #999;
-    display: inline-block;
 }
 
 .comment-reply-submit{
