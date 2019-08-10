@@ -16,6 +16,16 @@ router.post('/comments', function(req, res) {
     return res.status(400).send("body is missing");
   }
 
+  let parentPost = req.body.parentPost;
+  
+  Post.findByIdAndUpdate(
+    parentPost,
+    { lastUpdated: Date.now()},
+    {useFindAndModify: false}
+  ).catch(err => {
+    console.error(err);
+  })
+
   let newComment = req.body;
   newComment.dateCreated = Date.now();
   newComment = Comment(newComment);
@@ -97,6 +107,8 @@ router.get('/comments/:ObjectId', function(req, res){
 
 //update comment by id
 router.put('/comments/:ObjectId', function(req, res){
+  let edited = req.body;
+  edited.lastUpdated = Date.now();
   Comment.findByIdAndUpdate(req.params.ObjectId, req.body, {new: true})
     .then(comment =>{
       return res.status(200).json(comment);
@@ -130,7 +142,6 @@ router.get('/comments/:ObjectId/vote/:voterId', function(req, res){
 
       //get the update data for new votes and voters
       let data = await comment.voteUpdateData(voterId);
-      data.lastUpdated = Date.now();
       Comment.findByIdAndUpdate(req.params.ObjectId, data, {new: true})
         .then(comment => {
           return res.status(200).json(comment);

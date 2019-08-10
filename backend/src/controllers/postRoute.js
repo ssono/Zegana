@@ -186,7 +186,9 @@ router.get('/posts/:ObjectId', function (req, res) {
 
 //Update specific post by ID
 router.put('/posts/:ObjectId', function (req, res) {
-  Post.findByIdAndUpdate(req.params.ObjectId, req.body, { new: true })
+  let edited = req.body;
+  edited.lastUpdated = Date.now();
+  Post.findByIdAndUpdate(req.params.ObjectId, edited, { new: true })
     .then(post => {
       return res.status(200).json(post);
     })
@@ -217,7 +219,6 @@ router.get('/posts/:ObjectId/vote/:voterId', function (req, res) {
 
       //get the update data for new votes and voters
       let data = await post.voteUpdateData(voterId);
-      data.lastUpdated = Date.now();
       Post.findByIdAndUpdate(req.params.ObjectId, data, { new: true })
         .then(post => {
           return res.status(200).json(post);
@@ -337,7 +338,7 @@ router.get('/posts/:ObjectId/save/:usrId', async function (req, res) {
 
     const updatedPost = await Post.findByIdAndUpdate(
       objectId,
-      { savers: newSavers, lastUpdated: Date.now() },
+      { savers: newSavers},
       { useFindAndModify: false, new: true }
     ).catch(err => {
       return res.status(500).json(err);
@@ -361,7 +362,7 @@ router.get('/posts/:ObjectId/save/:usrId', async function (req, res) {
 
     const updatedPost = await Post.findByIdAndUpdate(
       objectId,
-      { savers: newSavers, lastUpdated: Date.now() },
+      { savers: newSavers },
       { useFindAndModify: false, new: true }
     ).catch(err => {
       return res.status(500).json(err);
