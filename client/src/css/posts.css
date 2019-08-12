@@ -42,3 +42,21 @@
 #next-button{
     float: right;
 }
+
+@media (min-width: 992px) {
+    .page-navigation span {
+        width: 10%;
+    }
+
+    #center-info {
+        width: 50%;
+    }
+
+    #post-sort-dropdown {
+        width: 10%;
+    }
+
+    .content-main {
+        margin: 0% 5%;
+    }
+}

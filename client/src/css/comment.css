@@ -50,6 +50,41 @@
 }
 
 .comment-replies{
-    padding-left: 4%;
+    padding-left: 3%;
     border-left: 1px solid #ddd;
+}
+
+@media (min-width: 992px) {
+    .comment-wrap {
+        padding: 1% 2%;
+        margin: 1% 0%;
+    }
+
+    .comment-content-wrap {
+        margin: 1% 0%;
+    }
+
+    .comment-replies {
+        padding-left: 1%;
+    }
+
+    #comment-reply {
+        margin-bottom: 0%;
+    }
+
+    #comment-numreplies {
+        margin-bottom: 0%;
+    }
+
+    .comment-footer p {
+        font-size: 1.2em;
+    }
+
+    .comment-header p {
+        font-size: 1.3em;
+    }
+
+    .comment-content-wrap .DraftEditor-root {
+        font-size: 1.3em;
+    }
 }

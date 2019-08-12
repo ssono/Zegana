@@ -11,3 +11,14 @@
 .idea-slug-info{
     color: #999;
 }
+
+@media (min-width: 992px) {
+
+    .idea-slug-wrapper {
+        margin: 2% 5%;
+    }
+
+    .idea-slug-title {
+        font-size: 1.2em;
+    }
+}

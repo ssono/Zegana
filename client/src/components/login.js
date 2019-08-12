@@ -15,6 +15,7 @@ class Login extends Component {
         this.changeEmail = this.changeEmail.bind(this);
         this.changePassword = this.changePassword.bind(this);
         this.toggleRemember = this.toggleRemember.bind(this);
+        this.openSignup = this.openSignup.bind(this);
 
 
         this.state = {
@@ -24,6 +25,11 @@ class Login extends Component {
             remember: false
         }
 
+    }
+
+    openSignup() {
+        this.props.closeLogin();
+        this.props.showSignup();
     }
 
     submitLogin(event) {
@@ -136,6 +142,7 @@ class Login extends Component {
 
                         <Button type="submit">Login</Button>
                     </Form>
+                    <p id="signup-main">Don't have an account? <span id="signup-switch" onClick={this.openSignup}>Sign up</span></p>
                 </Modal.Body>
             </Modal>
         )

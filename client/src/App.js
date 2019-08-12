@@ -62,15 +62,16 @@ class App extends Component {
             A community for explorers, hackers, and scholars to share their ideas.
           </p>
 
-          <Button id="signup" onClick={this.showSignup}>Signup</Button>
+          <Button id="tryit" onClick={() => window.location.href = '/posts/new/1'}>Try it</Button>
           <br />
-          <Button id="login" onClick={this.showLogin}>Login</Button>
+          <Button id="signup" onClick={this.showSignup}>Sign up</Button>
+          <p id="login-main">Already have an account? <span id="login" onClick={this.showLogin}>Login</span></p>
         </div>
 
         {/* Sign Up Modal */}
-        <Signup open={this.state.signup} closeSignup={this.closeSignup} />
+        <Signup open={this.state.signup} closeSignup={this.closeSignup} showLogin={this.showLogin}/>
 
-        <Login open={this.state.login} closeLogin={this.closeLogin} />
+        <Login open={this.state.login} closeLogin={this.closeLogin} showSignup={this.showSignup}/>
 
 
 

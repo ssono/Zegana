@@ -62,6 +62,11 @@ class Comment extends Component {
         e.preventDefault();
         e.stopPropagation(); 
 
+        if(!this.state.uid) {
+            alert('You must be logged in to reply');
+            return;
+        }
+
         if(!this.state.newReply.getCurrentContent().hasText()){
             alert('Reply must have content');
             return;
@@ -128,7 +133,7 @@ class Comment extends Component {
     }
 
     async toggleVote(){
-        if(this.state.uid !== undefined){
+        if(this.state.uid){
             this.setState({voted: !this.state.voted});
             const comment = await fetch(`http://localhost:8000/comments/${this.state.comment._id}/vote/${this.state.uid}`)
                 .then(res => res.json());

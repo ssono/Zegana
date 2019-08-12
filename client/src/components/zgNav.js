@@ -53,8 +53,8 @@ class Zgnav extends Component {
             <Nav className="ml-auto" variant="pills">
                 <Nav.Link id="signup" onClick={this.showSignup}>Signup</Nav.Link>
                 <Nav.Link id="login" onClick={this.showLogin}>Login</Nav.Link>
-                <Signup open={this.state.signup} closeSignup={this.closeSignup} />
-                <Login open={this.state.login} closeLogin={this.closeLogin} />
+                <Signup open={this.state.signup} closeSignup={this.closeSignup} showLogin={this.showLogin}/>
+                <Login open={this.state.login} closeLogin={this.closeLogin} showSignup={this.showSignup}/>
             </Nav>
         )
 

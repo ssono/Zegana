@@ -64,6 +64,11 @@ class Idea extends Component {
         e.preventDefault();
         e.stopPropagation();
 
+        if(!this.state.uid) {
+            alert('You must be logged in to comment');
+            return;
+        }
+
         if(!this.state.newComment.getCurrentContent().hasText()){
             alert('Comment must have content');
             return;
@@ -100,7 +105,7 @@ class Idea extends Component {
     }
 
     async toggleSave(){
-        if(this.state.uid !== undefined){
+        if(this.state.uid){
             this.setState({saved: !this.state.saved});
             const post = await fetch(`http://localhost:8000/posts/${this.state.post._id}/save/${this.state.uid}`)
                 .then(res => res.json());
@@ -110,7 +115,7 @@ class Idea extends Component {
     }
 
     async toggleVote(){
-        if(this.state.uid !== undefined){
+        if(this.state.uid){
             this.setState({voted: !this.state.voted});
             const post = await fetch(`http://localhost:8000/posts/${this.state.post._id}/vote/${this.state.uid}`)
                 .then(res => res.json());
@@ -176,93 +181,96 @@ class Idea extends Component {
             return (
                 <div className="container-fluid">
                     <ZgNav />
-                    <div className="idea-header">
-                        <h1 className="idea-title">{this.state.post.title}</h1>
-                        <p className="idea-subtitle">By: OP</p>
-                        <p className="idea-subtitle">submitted {timeDiffString(this.state.post.dateCreated)} ago</p>
-                        {(this.state.uid === this.state.post.author) ? editButtons: null}
-                        <hr/>
-                    </div>
-                    
-                    <div className="idea-wrap">
-
-                        <h1 className="idea-content-title">Problem</h1>
-                        <div className="idea-content">
-                            <Editor
-                                readOnly={true}
-                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.problem)))}
-                            />
+                    <div className="content-main">
+                        <div className="idea-header">
+                            <h1 className="idea-title">{this.state.post.title}</h1>
+                            <p className="idea-subtitle">By: OP</p>
+                            <p className="idea-subtitle">submitted {timeDiffString(this.state.post.dateCreated)} ago</p>
+                            {(this.state.uid === this.state.post.author) ? editButtons: null}
+                            <hr/>
                         </div>
-
-                        <h1 className="idea-content-title">Solution</h1>
-                        <div className="idea-content">
-                            
-                            <Editor
-                                readOnly={true}
-                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.solution)))}
-                            />
-                        </div>
-
-                        <h1 className="idea-content-title">Plan</h1>
-                        <div className="idea-content">
-                            <Editor
-                                readOnly={true}
-                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.plan)))}
-                            />
-                        </div>
-
-                        <h1 className="idea-content-title">Feasibility</h1>
-                        <div className="idea-content">
-                            <Editor
-                                readOnly={true}
-                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.feasibility)))}
-                            />
-                        </div>
-
-                        <h1 className="idea-content-title">How can we make this work?</h1>
-                        <div className="idea-content">
-                            <Editor
-                                readOnly={true}
-                                editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.help)))}
-                            />
-                        </div>
-
-                    </div>
-
-                    <div className="idea-footer">
-                        <p className="idea-votes idea-footer-section">{this.state.post.votes} votes</p>
-                        <FaArrowCircleUp 
-                            className="idea-footer-section" 
-                            size="1.7em" 
-                            color={this.state.voted? "#00966e": "#999"}
-                            onClick={this.toggleVote}
-                        />
-                        <FaBookmark 
-                            className="idea-footer-section" 
-                            size="1.7em" 
-                            color={this.state.saved? "#00966e": "#999"} 
-                            onClick={this.toggleSave}
-                        />
                         
-                    </div>
+                        <div className="idea-wrap">
 
-                    <div className="idea-newComment">
-                        <h1>Comments</h1>
-                        <div hidden={!this.state.inputVisible}>    
-                            <MyEditor 
-                                placeholder="Questions? Comments? Contributions?"
-                                editorState={this.state.newComment}
-                                update={(editorState) => this.setState({newComment: editorState})}
-                            />
-                            <Button type="submit" onClick={this.submitComment} className="idea-comment-submit">Add Comment</Button>
+                            <h1 className="idea-content-title">Problem</h1>
+                            <div className="idea-content">
+                                <Editor
+                                    readOnly={true}
+                                    editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.problem)))}
+                                />
+                            </div>
+
+                            <h1 className="idea-content-title">Solution</h1>
+                            <div className="idea-content">
+                                
+                                <Editor
+                                    readOnly={true}
+                                    editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.solution)))}
+                                />
+                            </div>
+
+                            <h1 className="idea-content-title">Plan</h1>
+                            <div className="idea-content">
+                                <Editor
+                                    readOnly={true}
+                                    editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.plan)))}
+                                />
+                            </div>
+
+                            <h1 className="idea-content-title">Feasibility</h1>
+                            <div className="idea-content">
+                                <Editor
+                                    readOnly={true}
+                                    editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.feasibility)))}
+                                />
+                            </div>
+
+                            <h1 className="idea-content-title">How can we make this work?</h1>
+                            <div className="idea-content">
+                                <Editor
+                                    readOnly={true}
+                                    editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(this.state.post.help)))}
+                                />
+                            </div>
+
                         </div>
-                        <hr/>
-                    </div>
 
-                    <div className="idea-comments">
-                        {commentBlocks}
-                    </div>
+                        <div className="idea-footer">
+                            <p className="idea-votes idea-footer-section">{this.state.post.votes} votes</p>
+                            <FaArrowCircleUp 
+                                className="idea-footer-section" 
+                                size="1.7em" 
+                                color={this.state.voted? "#00966e": "#999"}
+                                onClick={this.toggleVote}
+                            />
+                            <FaBookmark 
+                                className="idea-footer-section" 
+                                size="1.7em" 
+                                color={this.state.saved? "#00966e": "#999"} 
+                                onClick={this.toggleSave}
+                            />
+                            <hr/>
+                        </div>
 
+                        
+
+                        <div className="idea-newComment">
+                            <h1>Comments</h1>
+                            <div hidden={!this.state.inputVisible}>    
+                                <MyEditor 
+                                    placeholder="Questions? Comments? Contributions?"
+                                    editorState={this.state.newComment}
+                                    update={(editorState) => this.setState({newComment: editorState})}
+                                />
+                                <Button type="submit" onClick={this.submitComment} className="idea-comment-submit">Add Comment</Button>
+                            </div>
+                            <hr/>
+                        </div>
+
+                        <div className="idea-comments">
+                            {commentBlocks}
+                        </div>
+                    </div>
                 </div>
                 
             )

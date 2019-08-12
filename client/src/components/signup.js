@@ -15,6 +15,7 @@ class Signup extends Component {
     this.changePassword = this.changePassword.bind(this);
     this.changeUsername = this.changeUsername.bind(this);
     this.submitSignup = this.submitSignup.bind(this);
+    this.openLogin = this.openLogin.bind(this);
 
 
     this.state = {
@@ -25,6 +26,11 @@ class Signup extends Component {
       availableUsername: true
     }
 
+  }
+
+  openLogin() {
+    this.props.closeSignup();
+    this.props.showLogin();
   }
 
 
@@ -145,6 +151,7 @@ class Signup extends Component {
             <Button type="submit">Sign Up</Button>
 
           </Form>
+          <p id="login-main">Already have an account? <span id="login-switch" onClick={this.openLogin}>Login</span></p>
         </Modal.Body>
       </Modal>
     )

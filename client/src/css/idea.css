@@ -97,3 +97,26 @@ hr {
     font-size: 0.8em;
 }
 
+@media (min-width: 992px) {
+    .idea-content-title {
+        padding: 1%;
+    }
+
+    .idea-content {
+        padding: 2%;
+    }
+
+    .idea-footer {
+        margin-bottom: 3%;
+    }
+
+    .idea-newComment h1 {
+        font-size: 2em;
+    }
+
+    .idea-content .DraftEditor-root {
+        font-size: 1.1em
+    }
+
+}
+

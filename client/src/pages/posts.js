@@ -77,24 +77,25 @@ class Posts extends Component {
                 <div className="container-fluid">
                     <ZgNav />
 
-                    <DropdownButton 
-                        id="post-sort-dropdown"
-                        title="Sort"
-                    >
-                        <Dropdown.Item href="/posts/new/1">New</Dropdown.Item>
-                        <Dropdown.Item href="/posts/active/1">Active</Dropdown.Item>
-                        <Dropdown.Item href="/posts/top/1">Top All Time</Dropdown.Item>
-                        <Dropdown.Item href="/posts/topYear/1">Top Past Year</Dropdown.Item>
-                        <Dropdown.Item href="/posts/topMonth/1">Top Past Month</Dropdown.Item>
-                        <Dropdown.Item href="/posts/topWeek/1">Top Past Week</Dropdown.Item>
-                        <Dropdown.Item href="/account/topDay/1"> Top Past Day</Dropdown.Item>
-                    </DropdownButton>
+                    <div className="content-main">
+                        <DropdownButton 
+                            id="post-sort-dropdown"
+                            title={this.state.sorting}
+                        >
+                            <Dropdown.Item href="/posts/new/1">New</Dropdown.Item>
+                            <Dropdown.Item href="/posts/active/1">Active</Dropdown.Item>
+                            <Dropdown.Item href="/posts/top/1">Top All Time</Dropdown.Item>
+                            <Dropdown.Item href="/posts/topYear/1">Top Past Year</Dropdown.Item>
+                            <Dropdown.Item href="/posts/topMonth/1">Top Past Month</Dropdown.Item>
+                            <Dropdown.Item href="/posts/topWeek/1">Top Past Week</Dropdown.Item>
+                        </DropdownButton>
 
-                    {ideas}
-                    <div className="page-navigation">
-                        <span id="prev-button" onClick={this.navPrev} style={(this.state.page === '1')? {backgroundColor: '#999'}: {} }>Prev Page</span>
-                        <span id="center-info"><p>{this.state.page}</p></span>
-                        <span id="next-button" onClick={this.navNext} style={(this.state.ideas.length === 0)? {backgroundColor: '#999'}: {} }>Next Page</span>
+                        {ideas}
+                        <div className="page-navigation">
+                            <span id="prev-button" onClick={this.navPrev} style={(this.state.page === '1')? {backgroundColor: '#999'}: {} }>Prev Page</span>
+                            <span id="center-info"><p>{this.state.page}</p></span>
+                            <span id="next-button" onClick={this.navNext} style={(this.state.ideas.length === 0)? {backgroundColor: '#999'}: {} }>Next Page</span>
+                        </div>
                     </div>
                 </div>
             )
